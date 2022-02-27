@@ -1,0 +1,64 @@
+{% extends 'base/tables.html' %}
+
+{% block extracss %}
+	{{ block.super }}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+{% endblock extracss %}
+
+{% block titlepage %}
+<div class="card-title">
+	<h3 class="card-label">PRACTICAS
+	<span class="d-block text-muted pt-2 font-size-sm"></span></h3>
+</div>
+{% endblock titlepage %}
+
+{% block buttoncreatenew %}
+	<button type="button"  onclick="abrir_modal_creacion('{% url 'gestionpratica:solicitudpracticas_crear' %}')"
+			class="btn btn-primary font-weight-bolder">
+		{% include 'buttons/buttoncreate.html' %}
+		Nueva solicitud practicas
+	</button>
+	<a href="{% url 'gestionpratica:solicitudpracticas_crear' %}"
+			class="btn btn-primary font-weight-bolder">
+		{% include 'buttons/buttoncreate.html' %}
+		Nueva solicitud practicas
+	</a>
+{% endblock buttoncreatenew %}
+
+{% block datetablelist %}
+<thead>
+	<tr>
+		<th>NOMBRES</th>
+		<th>AÑO</th>
+		<th>PERIODO</th>
+		<th>NUM DÍAS</th>
+		<th>DUR DOC</th>
+		<th>GES VEH</th>
+		<th>FECHA IN</th>
+		<th>FECHA FIN</th>
+		<th>ACCIONES</th>
+	</tr>
+</thead>
+<tbody>
+{% for objects in object_list %}
+	<tr>
+		<td>{{objects.solp_nombre}}</td>
+		<td>{{objects.solp_anio}}</td>
+		<td>{{objects.peun_id}}</td>
+		<td>{{objects.solp_numerodias}}</td>
+		<td>{{objects.solp_duraciondoc}}</td>
+		<td>{{objects.solp_cvehiculopractica}}</td>
+		<td>{{objects.solp_fechainiciopractica}}</td>
+		<td>{{objects.solp_fechafinpractica}}</td>
+		<td><a href="{% url 'gestionpratica:practicas_detalle' objects.solp_id %}" class="btn btn-light-success font-weight-bold py-3 px-6 mb-2 text-center btn-block">Gestionar Practica</a>
+		</td>
+	</tr>
+{% endfor %}
+	</tbody>
+{% endblock datetablelist %}
+
+{% block javascripts %}
+  {{ block.super}}
+	<script src="/static/assets/js/pages/crud/forms/widgets/bootstrap-switch.js"></script>
+{% endblock javascripts %}

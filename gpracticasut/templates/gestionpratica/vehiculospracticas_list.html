@@ -1,0 +1,59 @@
+{% extends 'base/tables.html' %}
+
+{% block extracss %}
+	{{ block.super }}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+{% endblock extracss %}
+
+{% block titlepage %}
+<div class="card-title">
+	<h3 class="card-label">{{ page_title }}
+	<span class="d-block text-muted pt-2 font-size-sm"></span></h3>
+</div>
+{% endblock titlepage %}
+
+{% block buttoncreatenew %}
+	<div>
+		<a href="{% url 'gestionpratica:practicas_detalle' pk %}" class="btn btn-success font-weight-bold py-2 px-3 px-xxl-5 my-1">
+			{% include 'buttons/buttoncreate.html' %}
+			Finalizar
+		</a>
+	</div>
+	<div>
+		<button type="button" onclick="abrir_modal_creacion('{% url 'gestionpratica:vehiculopractica_add' pk %}')"
+				class="btn btn-primary font-weight-bolder">
+			{% include 'buttons/buttoncreate.html' %}
+			Adicionar Vehiculo
+		</button>
+	</div>
+{% endblock buttoncreatenew %}
+
+{% block datetablelist %}
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>PLACA</th>
+			<th>MARCA</th>
+			<th>TIPO</th>
+			<th>TRANSPORTE</th>
+			<th>COMBUSTIBLE</th>
+			<th>ACCIONES</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for vehiculos in vehiculos %}
+		<tr>
+			<td>{{vehiculos.vehi_id.vehi_id}}</td>
+			<td>{{vehiculos.vehi_id.vehi_placa}}</td>
+			<td>{{vehiculos.vehi_id.mveh_id.mveh_nombre}}</td>
+			<td>{{vehiculos.vehi_id.tveh_id.tveh_nombre}}</td>
+			<td>{{vehiculos.vehi_id.vehi_transporte}}</td>
+			<td>{{vehiculos.vehi_id.vehi_combustible}}</td>
+			<td>
+			</td>
+
+		</tr>
+	{% endfor %}
+	</tbody>
+{% endblock datetablelist %}

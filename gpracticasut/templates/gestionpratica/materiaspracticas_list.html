@@ -1,0 +1,51 @@
+{% extends 'base/tables.html' %}
+
+{% block extracss %}
+	{{ block.super }}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+{% endblock extracss %}
+
+{% block titlepage %}
+<div class="card-title">
+	<h3 class="card-label">{{ page_title }}
+	<span class="d-block text-muted pt-2 font-size-sm"></span></h3>
+</div>
+{% endblock titlepage %}
+
+{% block buttoncreatenew %}
+	<div>
+	<a href="{% url 'gestionpratica:practicas_detalle' pk %}"
+			class="btn btn-success font-weight-bolder">
+		{% include 'buttons/buttoncreate.html' %}
+		Finalizar
+	</a>
+	</div>
+	<div>
+	<a href="{% url 'gestionpratica:materiaspracticas_add' pk %}"
+			class="btn btn-primary font-weight-bolder">
+		{% include 'buttons/buttoncreate.html' %}
+		Adicionar Materia
+	</a>
+	</div>
+{% endblock buttoncreatenew %}
+
+{% block datetablelist %}
+	<thead>
+		<tr>
+			<th>CODIGO</th>
+			<th>NOMBRE</th>
+			<th>ACCIONES</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for materias in materias %}
+		<tr>
+			<td>{{materias.mate_codigomateria.mate_codigomateria}}</td>
+			<td>{{materias.mate_codigomateria.mate_nombre}}</td>
+			<td><a href="{% url 'gestionpratica:gruposmateria_listar' pk materias.mate_codigomateria.mate_codigomateria %}" class="btn btn-light-success font-weight-bold py-3 px-6 mb-2 text-center btn-block">Gestionar Estudiantes</a></td>
+
+		</tr>
+	{% endfor %}
+	</tbody>
+{% endblock datetablelist %}

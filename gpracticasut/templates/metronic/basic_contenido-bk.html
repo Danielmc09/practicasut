@@ -1,0 +1,23 @@
+{% extends "metronic/base_site.html" %}
+{% block contentcontainer %}
+ <!--begin::Entry-->
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container">
+        <!--begin::Card-->
+        <div class="card card-custom">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-label">{% block title1 %}{% endblock title1 %}</h3>
+                </div>
+            </div>
+
+    <!--end::Card-->
+        {% block contenido %}
+        {% endblock contenido %}
+        </div>
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Entry-->
+{% endblock contentcontainer %}

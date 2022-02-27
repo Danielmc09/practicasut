@@ -1,0 +1,93 @@
+<!--<div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">{{ page_title }}</h4>
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+      </div>
+</div>-->
+
+
+<!--begin::Modal-->
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{ page_title }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i aria-hidden="true" class="ki ki-close"></i>
+            </button>
+        </div>
+        {% if obj %}
+            <form data-parsley-validate class="form-horizontal form-label-left" method='post' role="form" action="{% url 'gestionflota:vehiculo_editar' obj.pk %}">
+        {% else %}
+            <form data-parsley-validate class="form-horizontal form-label-left" method='post' role="form" action="{% url 'gestionflota:vehiculo_crear' %}">
+        {% endif %}
+
+
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label title="{{form.vehi_placa.help_text}}" class="col-form-label text-right col-lg-3 col-sm-12">{{form.vehi_placa.label}}<span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{form.vehi_placa}}
+                    </div>
+                  </div>
+                <div class="form-group row">
+                    <label title="{{form.mveh_id.help_text}}" class="col-form-label text-right col-lg-3 col-sm-12">{{form.mveh_id.label}}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{form.mveh_id}}
+                    </div>
+                  </div>
+                <div class="form-group row">
+                    <label title="{{form.tveh_id.help_text}}" class="col-form-label text-right col-lg-3 col-sm-12">{{form.tveh_id.label}}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{form.tveh_id}}
+                    </div>
+                  </div>
+                <div class="form-group row">
+                    <label title="{{form.vehi_combustible.help_text}}" class="col-form-label text-right col-lg-3 col-sm-12">{{form.vehi_combustible.label}}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{form.vehi_combustible}}
+                    </div>
+                  </div>
+                <div class="form-group row">
+                    <label title="{{form.vehi_capacidadcombustible.help_text}}" class="col-form-label text-right col-lg-3 col-sm-12">{{form.vehi_capacidadcombustible.label}}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{form.vehi_capacidadcombustible}}
+                    </div>
+                  </div>
+                <div class="form-group row">
+                    <label title="{{form.vehi_capacidadpasajeros.help_text}}" class="col-form-label text-right col-lg-3 col-sm-12">{{form.vehi_capacidadpasajeros.label}}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{form.vehi_capacidadpasajeros}}
+                    </div>
+                  </div>
+                <div class="form-group row">
+                    <label title="{{form.vehi_capacidadaaforopasajeros.help_text}}" class="col-form-label text-right col-lg-3 col-sm-12">{{form.vehi_capacidadaaforopasajeros.label}}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{form.vehi_capacidadaaforopasajeros}}
+                    </div>
+                  </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary font-weight-bold">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--end::Modal-->

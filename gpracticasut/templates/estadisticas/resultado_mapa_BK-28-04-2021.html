@@ -1,0 +1,112 @@
+{% extends 'metronic/basic_contenido.html' %}
+	{% block title2 %}
+		{{ page_title }}
+	{% endblock title2 %}
+	{% block title3 %}
+		{{ page_title }}
+	{% endblock title3 %}
+	{% block title1 %}
+		{{ page_title }}
+	{% endblock title1 %}
+
+{% block contenido %}
+<div class="card-body">
+
+
+	 <form id="demo-form2" method='post' role="form" enctype="multipart/form-data">
+		 {% csrf_token %}
+	<div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Variables</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control" id="kt_select2_1" name="param">
+					<option value="AK">Desempleo</option>
+					<option value="HI">Pensionado</option>
+					<option value="CA">Analfabetismo (no sabe leer ni escribir)</option>
+					<option value="NV">Sedentarismo (menos de 150 min-ejerc/sem)</option>
+					<option value="OR">Tabaquismo</option>
+					<option value="WA">Consumo habitual de Alcohol etílico</option>
+					<option value="AZ">Animal sin esquema de vacunación completo</option>
+					<option value="CO">Actividad económica no definida (rebusque)</option>
+					<option value="ID">Consumo de agua domiciliaria sin tratar y cruda</option>
+					<option value="MT">No tener alcantarillado para aguas negras</option>
+					<option value="NE">No almacena bien los alimentos ni el agua</option>
+					<option value="NM">Edad productiva sin aportar ingresos familiares</option>
+					<option value="ND">Tiene el baño sin adecuada higiene</option>
+					<option value="UT">Almacenamiento de basuras domiciliarias en caneca sin tapa o directamente al suelo</option>
+					<option value="WY">Disposición de basuras domiciliarias en campo abierto o en fuentes hídricas</option>
+					<option value="AL">No tiene la cocina limpia</option>
+					<option value="AR">La cocina no está separada de las habitaciones</option>
+					<option value="IL">Tener familiares con diabetes mellitus</option>
+					<option value="IA">Cifras elevadas de glicemia alguna vez</option>
+					<option value="KS">No usa método de planificación</option>
+					<option value="KY">Perímetro de cintura elevado</option>
+					<option value="LA">Índice cintura/cadera</option>
+					<option value="MN">IMC elevado para sobrepeso y obesidad</option>
+					<option value="MS">IMC disminuido</option>
+					<option value="MO">Envases de plaguicidas utilizados en el hogar</option>
+					<option value="OK">Afrocolombiano</option>
+					<option value="SD">Intención de Gestación en próximos 6 meses</option>
+					<option value="TX">Gestantes</option>
+					<option value="TN">Exantema durante la gestación</option>
+					<option value="WI">Animales sin Vacunar</option>
+					<option value="CT">Pobre higiene personal (Bucal)</option>
+					<option value="DE">Presencia de Problemas ambientales por Ruido</option>
+					<option value="FL">Estratos 0 y 1 (Pobreza)</option>
+					<option value="GA">Disposición de excretas al aire libre</option>
+					<option value="IN">Antecedente de Diabetes en la familia (Padres, hermanos, abuelos y primos)</option>
+					<option value="ME">Presencia de fiebre en los últimos días</option>
+					<option value="MD">No consume habitualmente frutas y verduras</option>
+					<option value="MA">Presencia de Hacinamiento en el hogar</option>
+					<option value="MI">Pobre higiene de la vivienda</option>
+					<option value="NH">No tiene hábito de lavado de manos con agua y jabón</option>
+					<option value="NJ">Material de la casa diferente a bloque, piedra, material prefabricado, bahareque(zinc, teja, desechos, madera, cartón, plástico, vegetal, tela)</option>
+					<option value="NY">Material predominante del piso: madera, tierra, arena/option>
+					<option value="NC">Origen no potable del agua que consumen en la familia</option>
+					<option value="OH">Pertenece a la comunidad LGTBI (riesgo por cultura)</option>
+					<option value="PA">Curso de Vida Vejez</option>
+					<option value="RI">Accesibilidad al agua de manera irregular</option>
+					<option value="SC">No tiene servicio sanitario o tiene letrina</option>
+					<option value="VT">Tiene acueducto con IRCA inadecuado</option>
+					<option value="VA">Sin alumbrado o a gasolina, vela, kerosene o petróleo</option>
+					<option value="WV">Tiene cocina con leña</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Sitio</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control select2" id="kt_select2_3" name="parametro" multiple="multiple">
+					<optgroup label="Barrios">
+					 {% for barrios in barrios %}
+
+						<option value="{{barrios.id}}">{{barrios.barr_nombre}}</option>
+
+					{% endfor %}
+					</optgroup>
+
+				</select>
+			</div>
+		</div>
+
+											<div class="row">
+												<div class="col-lg-9 ml-lg-auto">
+													<button type="submit" class="btn btn-primary mr-2">Buscar</button>
+
+												</div>
+											</div>
+		 </form>
+
+	<p></p>
+    {{ mapa | safe }}
+    <p></p>
+
+
+</div>
+{% endblock contenido %}
+
+
+{% block javascripts %}
+  {{ block.super}}
+    <!-- select2-->
+    <script src="/static/assets/js/pages/crud/forms/widgets/select2.js"></script>
+{% endblock javascripts %}

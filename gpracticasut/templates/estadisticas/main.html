@@ -1,0 +1,8 @@
+<h1>hola</h1>
+{{ df | safe }}
+<p></p>
+{{ describe | safe }}
+<p></p>
+{% if chart %}
+<img src="data:image/png;base64, {{chart|safe}}"/>
+{% endif %}

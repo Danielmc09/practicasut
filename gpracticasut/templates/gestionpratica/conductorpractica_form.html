@@ -1,0 +1,54 @@
+<!--<div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">{{ page_title }}</h4>
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+      </div>
+</div>-->
+
+
+<!--begin::Modal-->
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{ page_title }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i aria-hidden="true" class="ki ki-close"></i>
+            </button>
+        </div>
+
+            <form data-parsley-validate class="form-horizontal form-label-left" method='post' role="form" action="{% url 'gestionpratica:conductorpractica_crear' pk pers pege %}">
+
+
+
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label title="{{form.grin_nombre.help_text}}" class="col-form-label text-right col-lg-3 col-sm-12">{{form.tiin_id.label}}<span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{form.tiin_id}}
+                    </div>
+                  </div>
+                <input type="hidden" name="solp_id" class="form-control" autofocus="autofocus" placeholder="Practica" required id="solp_id" value="{{ pk }}">
+                <input type="hidden" name="pers_id" class="form-control" autofocus="autofocus" placeholder="Persona id" required id="pers_id" value="{{ pers }}">
+                <input type="hidden" name="pege_id" class="form-control" autofocus="autofocus" placeholder="Persona gen" required id="pege_id" value="{{ pege }}">
+
+
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary font-weight-bold">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--end::Modal-->

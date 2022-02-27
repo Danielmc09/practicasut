@@ -1,0 +1,143 @@
+{% extends 'metronic/basic_contenido.html' %}
+	{% block title2 %}
+		{{ page_title }}
+	{% endblock title2 %}
+	{% block title3 %}
+		{{ page_title }}
+	{% endblock title3 %}
+	{% block title1 %}
+		{{ page_title }}
+	{% endblock title1 %}
+
+{% block contenido %}
+<div class="card-body">
+
+
+	 <form id="demo-form2" method='post' role="form" enctype="multipart/form-data">
+		 {% csrf_token %}
+	<div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Variables</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control" id="kt_select2_1" name="param">
+					<option value="rias_cons">Causas de Consulta al Medico Frecuentes</option>
+					<option value="rias_hosp">Causas de hospitalizacion Frecuentes</option>
+					<option value="nacimentos">Taza de Nacimientos</option>
+					<option value="defunciones">Taza de Mortalidad</option>
+					<option value="afilidos">Afliados Regimen Contribitivo</option>
+					<option value="proaffechas">Promedio de Año de Nacimiento Afliados</option>
+					<option value="pbgsexo">Poblacion Genral por Sexo</option>
+					<option value="etnias">Pertencientes a Étnias</option>
+					<option value="hatcalle">Habitantes Calle</option>
+					<option value="pbcursovida">Población por Curso de Vida</option>
+
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Por</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control select2" id="kt_select2___3" name="parametro" multiple="multiple">
+					<optgroup label="">
+					 <option value="AK">Compartivo Periodo</option>
+					 <option value="AK">Compartivo Sector</option>
+						<option value="AK">Compartivo Temporada</option>
+					</optgroup>
+
+				</select>
+			</div>
+		</div>
+		 <div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">item</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control select2" id="kt_select2_4" name="parametro" multiple="multiple">
+					<optgroup label="">
+					 <option value="AK">Mensual</option>
+						<option value="AK">BiMensual</option>
+						<option value="AK">TriMenstrual</option>
+						<option value="AK">Semestral</option>
+						<option value="AK">Anual</option>
+						<option value="AK">Invierno</option>
+						<option value="AK">Verano</option>
+					</optgroup>
+
+				</select>
+			</div>
+		</div>
+		 <div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Comunas</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control" id="id_comunasid" name="comunasid" ><!--onchange="cambiarOpcion()"-->
+					<option value=""></option>
+					{% for comuna in comuna %}
+						<option value="{{comuna.id}}">{{comuna.comu_nombre}}</option>
+					{% endfor %}
+
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Barrio</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control select2" id="kt_select2_3" name="parametro[]" multiple>
+					<optgroup label="Barrios">
+
+					</optgroup>
+
+				</select>
+			</div>
+		</div>
+		 <div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Rango de Fechas</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<input class="form-control" id="kt_daterangepicker_1" readonly="readonly" placeholder="Selecione Fechas de Busquedad" type="text" />
+			</div>
+		</div>
+
+											<div class="row">
+												<div class="col-lg-9 ml-lg-auto">
+													<button type="submit" class="btn btn-primary mr-2">Buscar</button>
+
+												</div>
+											</div>
+		 </form>
+
+	<p></p>
+    <p></p>
+		{% if chart %}
+		<img src="data:image/png;base64, {{chart|safe}}"/>
+		{% endif %}
+		<p></p>
+		{{ describe | safe }}
+		<p></p>
+
+    <p></p>
+
+
+</div>
+{% endblock contenido %}
+
+
+{% block javascripts %}
+  {{ block.super}}
+	<script>
+	$(function () {
+			//$('#id_paisnacimiento').val("{{ paisnacimiento.page_id }}").change();
+			//$('#id_paisnacimiento').val("{{ paissel.page_id }}").change();
+			$("#kt_select_da").remoteChained({
+				parents: "#id_variablesid",
+				url: "/estadisticas/parametrosajax/",
+			});
+			$("#kt_select2_3").remoteChained({
+				parents: "#id_comunasid",
+				url: "/estadisticas/barriosajax/",
+			});
+		});
+	</script>
+    <!-- select2-->
+	<script src="/static/js/jquery_chained/jquery.chained.remote.js"></script>
+    <script src="/static/assets/js/pages/crud/forms/widgets/select2.js"></script>
+	<script src="/static/assets/js/pages/crud/forms/widgets/bootstrap-datepicker.js"></script>
+	<script src="/static/assets/js/pages/crud/forms/widgets/bootstrap-daterangepicker.js"></script>
+
+{% endblock javascripts %}

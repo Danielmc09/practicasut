@@ -1,0 +1,56 @@
+{% extends 'base/tables.html' %}
+
+{% block extracss %}
+	{{ block.super }}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+{% endblock extracss %}
+
+{% block titlepage %}
+<div class="card-title">
+	<h3 class="card-label">{{ page_title }}
+	<span class="d-block text-muted pt-2 font-size-sm"></span></h3>
+</div>
+{% endblock titlepage %}
+
+{% block buttoncreatenew %}
+	<div>
+		<a href="{% url 'gestionpratica:practicas_detalle' pk %}" class="btn btn-success font-weight-bold py-2 px-3 px-xxl-5 my-1">
+			{% include 'buttons/buttoncreate.html' %}
+			Finalizar
+		</a>
+	</div>
+	<div>
+		<a href="{% url 'gestionpratica:docentepersona_add' pk %}"
+				class="btn btn-primary font-weight-bolder">
+			{% include 'buttons/buttoncreate.html' %}
+			Adicionar Docente
+		</a>
+	</div>
+{% endblock buttoncreatenew %}
+
+{% block datetablelist %}
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>DOCUMENTO</th>
+			<th>NOMBRES</th>
+			<th>TIPO</th>
+			<th>ACCIONES</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for docentes in docentes %}
+		<tr>
+			<td>{{docentes.pein_id}}</td>
+			<td>{{docentes.pers_id.pers_documentoidentidad}}</td>
+			<td>{{ docentes.pers_id.pers_primernombre }} {{ docentes.pers_id.pers_segundonombre }}
+				{{ docentes.pers_id.pers_primerapellido }} {{  docentes.pers_id.pers_segundoapellido }}</td>
+			<td>{{docentes.tiin_id.tiin_nombre}}</td>
+			<td>
+			</td>
+
+		</tr>
+	{% endfor %}
+	</tbody>
+{% endblock datetablelist %}

@@ -1,0 +1,52 @@
+{% extends 'base/tables.html' %}
+
+{% block extracss %}
+    {{ block.super }}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+{% endblock extracss %}
+
+{% block titlepage %}
+<div class="card-title">
+	<h3 class="card-label">TIPO VEHICULOS
+	<span class="d-block text-muted pt-2 font-size-sm"></span></h3>
+</div>
+{% endblock titlepage %}
+
+{% block buttoncreatenew %}
+    <button type="button" onclick="abrir_modal_creacion('{% url 'gestionflota:vehiculo_crear' %}')"
+            class="btn btn-primary font-weight-bolder">
+        {% include 'buttons/buttoncreate.html' %}
+        Nuevo Vehiculo
+    </button>
+{% endblock buttoncreatenew %}
+
+{% block datetablelist %}
+    <thead>
+    <tr>
+		<th>PLACA</th>
+		<th>MARCA</th>
+		<th>TIPO</th>
+		<th>COMBUSTIBLE</th>
+		<th>CAPAC COMBUS</th>
+		<th>CAPAC PASAJEROS</th>
+		<th>CAPAC PASAJEROS AFORO</th>
+		<th>ACCIONES</th>
+    </tr>
+    </thead>
+    <tbody>
+		{% for objects in object_list %}
+			<tr>
+				<td>{{objects.vehi_placa}}</td>
+				<td>{{objects.mveh_id}}</td>
+				<td>{{objects.tveh_id}}</td>
+				<td>{{objects.vehi_combustible}}</td>
+				<td>{{objects.vehi_capacidadcombustible}} Gal</td>
+				<td>{{objects.vehi_capacidadpasajeros}}</td>
+				<td>{{objects.vehi_capacidadaaforopasajeros}}</td>
+				<td><a class="btn btn-primary" onclick="abrir_modal_creacion('{% url 'gestionflota:vehiculo_editar' objects.vehi_id %}')"><span class="fa fa-edit"></span></a>
+				</td>
+			</tr>
+		{% endfor %}
+    </tbody>
+{% endblock datetablelist %}

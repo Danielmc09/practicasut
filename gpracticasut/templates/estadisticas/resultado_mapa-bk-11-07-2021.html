@@ -1,0 +1,90 @@
+{% extends 'metronic/basic_contenido.html' %}
+	{% block title2 %}
+		{{ page_title }}
+	{% endblock title2 %}
+	{% block title3 %}
+		{{ page_title }}
+	{% endblock title3 %}
+	{% block title1 %}
+		{{ page_title }}
+	{% endblock title1 %}
+
+{% block contenido %}
+<div class="card-body">
+
+
+	 <form id="demo-form2" method='post' role="form" enctype="multipart/form-data">
+		 {% csrf_token %}
+	<div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Variables</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control" id="kt_select2_1" name="param" onchange="cambiarOpcion()">
+					{% for criterio in criterio %}
+						<option value="{{criterio.id}}">{{criterio.vares_variable}}</option>
+					{% endfor %}
+
+				</select>
+			</div>
+		</div>
+
+		 <div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Parametros</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control" id="kt_select2_2" name="param">
+
+
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Sitio</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control select2" id="kt_select2_3" name="parametro" multiple="multiple" required>
+					<optgroup label="Barrios">
+					 {% for barrios in barrios %}
+
+						<option value="{{barrios.id}}">{{barrios.barr_nombre}}</option>
+
+					{% endfor %}
+					</optgroup>
+
+				</select>
+			</div>
+		</div>
+
+											<div class="row">
+												<div class="col-lg-9 ml-lg-auto">
+													<button type="submit" class="btn btn-primary mr-2">Buscar</button>
+
+												</div>
+											</div>
+		 </form>
+
+	<p></p>
+    {{ mapa | safe }}
+    <p></p>
+
+
+</div>
+{% endblock contenido %}
+
+
+{% block javascripts %}
+  {{ block.super}}
+	<script>
+		function cambiarOpcion(){
+			let criterioId = document.getElementById("kt_select2_1").value;
+			let url = '/estadisticas/busquedaporopciones/'+criterioId
+			fetch(url)
+			.then(function (result) {
+				return result.text();
+			})
+			.then(function (result) {
+				document.getElementById('kt_select2_2').innerHTML = result;
+			})
+		}
+	</script>
+    <!-- select2-->
+    <script src="/static/assets/js/pages/crud/forms/widgets/select2.js"></script>
+{% endblock javascripts %}

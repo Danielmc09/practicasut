@@ -1,0 +1,90 @@
+{% extends 'base/tables.html' %}
+
+{% block extracss %}
+	{{ block.super }}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+{% endblock extracss %}
+
+{% block titlepage %}
+<div class="card-title">
+	<h3 class="card-label">AGRUPACION DE TIPO DE INTEGRANTES
+	<span class="d-block text-muted pt-2 font-size-sm"></span></h3>
+</div>
+{% endblock titlepage %}
+
+{% block buttoncreatenew %}
+
+{% endblock buttoncreatenew %}
+
+{% block datetablelist %}
+	<thead>
+		<tr>
+			<th>DOCUMENTO</th>
+			<th>NOMBRES</th>
+			<th>DESCRIPCIÓN</th>
+			<th>ACCIONES</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for estudiantesgpr in estudiantesgpr %}
+		<tr>
+			<td>{{estudiantesgpr.pers_documentoidentidad}}</td>
+			<td>{{estudiantesgpr.pers_primernombre}} {{ estudiantesgpr.pers_segundonombre }} {{ estudiantesgpr.pers_primerapellido}} {{ estudiantesgpr.pers_segundoapellido}}</td>
+			<td></td>
+			<td><input type="checkbox" class="checkbox" name="record">
+			</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+<button id="btnInactivar" name="btnInactivar">Adccionar Estudiante a Practica</button>
+
+{% endblock datetablelist %}
+
+{% block javascripts %}
+  {{ block.super}}
+<script>
+	/*$("#btnInactivar").click(function(e){
+    e.preventDefault();
+    var ids = [];
+    $("table tbody").find('input[name="record"]').each(function(){
+      if($(this).is(":checked")){
+       var id = $(this).parents("tr").find("td").eq(0).html();
+       ids.push(id);
+      }
+    });
+	console.log(ids);
+	if(ids.length==0){
+     alert("Debe Seleccionar al menos un registro");
+     return false;
+    }*/
+	/*var token = '{{csrf_token}}';
+    var data = JSON.stringify({"ids":ids});
+    data = {"ids[]":ids};
+    console.log(data);
+	$.ajax({
+     headers: { "X-CSRFToken": token },
+     url: "{% url 'gestionpratica:matriculagrupopersona_listar' %}",
+     type: "POST",
+     data: data,
+     success: function(e){
+      if(e="OK"){
+       location.reload(true);
+      }
+     },
+     error: function(a,b,c){
+      alert(c);
+     }
+    });*/
+ });
+</script>
+
+    <!-- select2-->
+	<script src="/static/assets/js/pages/features/miscellaneous/sweetalert2.js"></script>
+	<script src="/static/assets/js/pages/crud/forms/widgets/bootstrap-datepicker.js"></script>
+    <script src="/static/assets/js/pages/crud/forms/widgets/select2.js"></script>
+	<!--<script src="/static/assets/js/pages/crud/forms/widgets/bootstrap-datepicker.js"></script>-->
+
+	<script src="/static/assets/js/pages/crud/forms/validation/form-controls.js"></script>
+
+{% endblock javascripts %}

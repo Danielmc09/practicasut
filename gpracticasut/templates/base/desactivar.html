@@ -1,0 +1,17 @@
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Desactivar</h2>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+            <div class="modal-body">{% csrf_token %}
+                <div class="text-center"><h3>¿Esta seguro de desactivar el campo {{ object }}?</h3></div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" type="button" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-default" onclick="desactivar({{ object.pk }});">Confirmar</button>
+                </div>
+            </div>
+    </div>
+</div>

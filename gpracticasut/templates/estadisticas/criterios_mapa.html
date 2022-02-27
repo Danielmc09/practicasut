@@ -1,0 +1,164 @@
+{% extends 'metronic/basic_contenido.html' %}
+	{% block title2 %}
+		{{ page_title }}
+	{% endblock title2 %}
+	{% block title3 %}
+		{{ page_title }}
+	{% endblock title3 %}
+	{% block title1 %}
+		{{ page_title }}
+	{% endblock title1 %}
+
+{% block contenido %}
+<div class="card-body">
+
+
+	 <form id="demo-form2" method='post' role="form" enctype="multipart/form-data">
+		 {% csrf_token %}
+
+		<!-- <div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Variables</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control" id="id_variablesid" name="variablesid" required >
+					<option value=""></option>
+					{% for criterio in criterio %}
+						<option value="{{criterio.id}}">{{criterio.vares_variable}}</option>
+					{% endfor %}
+
+				</select>
+			</div>
+		</div>-->
+
+		 <!--<div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Parametros</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control" id="kt_select2_2" name="parametrosid" required>
+				</select>
+			</div>
+		</div>-->
+
+
+
+
+
+		<div class="separator separator-dashed my-8"></div>
+		<div id="kt_repeater_1">
+			<div class="form-group row">
+				<label class="col-lg-2 col-form-label text-right">Cripterios:</label>
+				<div data-repeater-list="" class="col-lg-10">
+					<div data-repeater-item="" class="form-group row align-items-center">
+						<div class="col-md-3">
+							<label>Variables:</label>
+							<select class="form-control" id="id_variablesidid" name="variablesid" required ><!--onchange="cambiarOpcion()"-->
+								<option value=""></option>
+								{% for criterio in criterio %}
+									<option value="{{criterio.id}}">{{criterio.vares_variable}}</option>
+								{% endfor %}
+
+							</select>
+							<div class="d-md-none mb-2"></div>
+						</div>
+						<div class="col-md-3">
+							<label>Parametros:</label>
+							<select class="form-control" id="kt_select_da" name="parametrosid" required>
+								<option value=""></option>
+								{% for opcion in opcion %}
+									<option value="{{opcion.id}}">{{opcion.opcp_pregunta}}</option>
+								{% endfor %}
+							</select>
+							<div class="d-md-none mb-2"></div>
+						</div>
+
+						<div class="col-md-4">
+							<a href="javascript:;" data-repeater-delete="" class="btn btn-sm font-weight-bolder btn-light-danger">
+							<i class="la la-trash-o"></i>Quitar</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-2 col-form-label text-right"></label>
+				<div class="col-lg-4">
+					<a href="javascript:;" data-repeater-create="" class="btn btn-sm font-weight-bolder btn-light-primary">
+					<i class="la la-plus"></i>Adicionar</a>
+				</div>
+			</div>
+		</div>
+		 <div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Comunas</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control" id="id_comunasid" name="comunasid" required><!--onchange="cambiarOpcion()"-->
+					<option value=""></option>
+					{% for comuna in comuna %}
+						<option value="{{comuna.id}}">{{comuna.comu_nombre}}</option>
+					{% endfor %}
+
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label class="col-form-label text-right col-lg-3 col-sm-12">Barrio</label>
+			<div class="col-lg-4 col-md-9 col-sm-12">
+				<select class="form-control select2" id="kt_select2_3" name="parametro" multiple required>
+					<optgroup label="Barrios">
+
+					</optgroup>
+
+				</select>
+			</div>
+		</div>
+
+
+
+											<div class="row">
+												<div class="col-lg-9 ml-lg-auto">
+													<button type="submit" class="btn btn-primary mr-2">Buscar</button>
+
+												</div>
+											</div>
+		 </form>
+
+<p></p>
+    {{ mapa | safe }}
+    <p></p>
+
+
+</div>
+{% endblock contenido %}
+
+
+{% block javascripts %}
+  {{ block.super}}
+	<script>
+		$(function () {
+			//$('#id_paisnacimiento').val("{{ paisnacimiento.page_id }}").change();
+			//$('#id_paisnacimiento').val("{{ paissel.page_id }}").change();
+			$("#kt_select_da").remoteChained({
+				parents: "#id_variablesid",
+				url: "/estadisticas/parametrosajax/",
+			});
+			$("#kt_select2_3").remoteChained({
+				parents: "#id_comunasid",
+				url: "/estadisticas/barriosajax/",
+			});
+		});
+
+
+		/*function cambiarOpcion(){
+			let criterioId = document.getElementById("kt_select2_1").value;
+			let url = '/estadisticas/busquedaporopciones/'+criterioId
+			fetch(url)
+			.then(function (result) {
+				return result.text();
+			})
+			.then(function (result) {
+				document.getElementById('kt_select2_2').innerHTML = result;
+			})
+		}*/
+	</script>
+    <!-- select2-->
+    <script src="/static/assets/js/pages/crud/forms/widgets/select2.js"></script>
+	<script src="/static/js/jquery_chained/jquery.chained.remote.js"></script>
+	<script src="/static/assets/js/pages/crud/forms/widgets/form-repeater.js"></script>
+{% endblock javascripts %}

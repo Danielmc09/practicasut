@@ -1,0 +1,58 @@
+<!--<div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">{{ page_title }}</h4>
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+      </div>
+</div>-->
+
+
+<!--begin::Modal-->
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{ page_title }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i aria-hidden="true" class="ki ki-close"></i>
+            </button>
+        </div>
+        {% if obj %}
+            <form data-parsley-validate class="form-horizontal form-label-left" method='post' role="form" action="{% url 'gestionpratica:grupointegrante_editar' obj.pk %}">
+        {% else %}
+            <form data-parsley-validate class="form-horizontal form-label-left" method='post' role="form" action="{% url 'gestionpratica:grupointegrante_crear' %}">
+        {% endif %}
+
+
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label title="{{form.grin_nombre.help_text}}" class="col-form-label text-right col-lg-3 col-sm-12">{{form.grin_nombre.label}}<span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{form.grin_nombre}}
+                    </div>
+                  </div>
+                <div class="form-group row">
+                    <label title="{{form.grin_descripcion.help_text}}" class="col-form-label text-right col-lg-3 col-sm-12">{{form.grin_descripcion.label}}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{form.grin_descripcion}}
+                    </div>
+                  </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary font-weight-bold">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--end::Modal-->

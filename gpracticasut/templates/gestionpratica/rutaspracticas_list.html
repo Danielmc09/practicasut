@@ -1,0 +1,51 @@
+{% extends 'base/tables.html' %}
+
+{% block extracss %}
+	{{ block.super }}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+{% endblock extracss %}
+
+{% block titlepage %}
+<div class="card-title">
+	<h3 class="card-label">{{ page_title }}
+	<span class="d-block text-muted pt-2 font-size-sm"></span></h3>
+</div>
+{% endblock titlepage %}
+
+{% block buttoncreatenew %}
+	<div>
+	<a href="{% url 'gestionpratica:practicas_detalle' pract %}"
+			class="btn btn-success font-weight-bolder">
+		{% include 'buttons/buttoncreate.html' %}
+		Finalizar
+	</a>
+	</div>
+	<div>
+	<button type="button" onclick="abrir_modal_creacion('{% url 'gestionpratica:rutaspracticas_crear' pract %}')"
+			class="btn btn-primary font-weight-bolder">
+		{% include 'buttons/buttoncreate.html' %}
+		Nuevo Ruta
+	</button>
+	</div>
+{% endblock buttoncreatenew %}
+
+{% block datetablelist %}
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>RUTA</th>
+			<th>ACCIONES</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for rutas in rutas %}
+		<tr>
+			<td>{{rutas.rupr_id}}</td>
+			<td>{{rutas.lupr_id}}</td>
+			<td></td>
+
+		</tr>
+	{% endfor %}
+	</tbody>
+{% endblock datetablelist %}
