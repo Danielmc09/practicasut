@@ -80,10 +80,10 @@ class SolictudPraticaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SolictudPraticaForm, self).__init__(*args, **kwargs)
         date = datetime.date.today()
-        print('fecha ', date)
+        print('fecha file form : ', date)
         year = date.strftime("%Y")
         #depar = DepartamentoGeneral.objects.values_list('dege_id', flat=True).filter(page_id='CO')
-        self.fields['peun_id'].queryset = PeriodoUniversidad.objects.filter(peun_ano = year)
+        self.fields['peun_id'].queryset = PeriodoUniversidad.objects.filter(peun_ano=year)
         self.fields['solp_anio'].initial=year
 
 
@@ -94,10 +94,8 @@ class SolictudPraticaForm(forms.ModelForm):
             'solp_anio',
             'peun_id',
             'solp_numerodias',
-           # 'solp_duraciondoc',
             'solp_fechainiciopractica',
             'solp_fechafinpractica',
-            'solp_cvehiculopractica',
             'solp_liqviaticos',
             'solp_idayregreso',
             'solp_ayudaeconomica',
@@ -107,10 +105,8 @@ class SolictudPraticaForm(forms.ModelForm):
             'solp_anio': 'Año',
             'peun_id': 'Periodo',
             'solp_numerodias': 'Número de Días',
-           # 'solp_duraciondoc': 'Duracioón Doc',
             'solp_fechainiciopractica': 'Fecha Salida',
             'solp_fechafinpractica': 'Fecha Llegada',
-            'solp_cvehiculopractica': 'Ges Vehiculo',
             'solp_liqviaticos': 'Liquidacion de Viaticos',
             'solp_idayregreso': 'Ida y Regreso',
             'solp_ayudaeconomica': 'Ayuda Económica',
@@ -120,10 +116,8 @@ class SolictudPraticaForm(forms.ModelForm):
             'solp_anio': 'Año',
             'peun_id': 'Periodo',
             'solp_numerodias': 'Numero de Días',
-           # 'solp_duraciondoc': 'Dura Doc',
             'solp_fechainiciopractica': 'Fecha Salida',
             'solp_fechafinpractica': 'Fecha Llegada',
-            'solp_cvehiculopractica': 'Ges Vehiculo',
             'solp_liqviaticos': 'solp_liqviaticos',
             'solp_idayregreso': 'Ida y Regreso',
             'solp_ayudaeconomica': 'Ayuda Económica',
@@ -136,10 +130,24 @@ class SolictudPraticaForm(forms.ModelForm):
             'solp_liqviaticos': forms.Select(attrs={'class': 'form-control', 'rows': 5, 'cols': 20, 'placeholder': 'Viaticos'}),
             'solp_idayregreso': forms.Select(attrs={'class': 'form-control', 'rows': 5, 'cols': 20, 'placeholder': 'ida'}),
             'solp_ayudaeconomica': forms.Select(attrs={'class': 'form-control', 'rows': 5, 'cols': 20, 'placeholder': 'Ayuda eco'}),
-            #'solp_duraciondoc': forms.TextInput(attrs={'class': 'form-control', 'rows': 5, 'cols': 20, 'placeholder': 'Durcion'}),
             'solp_fechainiciopractica': forms.TextInput(attrs={'class': 'form-control', 'rows': 5, 'cols': 20, 'placeholder': 'Fecha Salida'}),
             'solp_fechafinpractica': forms.TextInput(attrs={'class': 'form-control', 'rows': 5, 'cols': 20, 'placeholder': 'Fecha Llegada'}),
-            'solp_cvehiculopractica': forms.Select(attrs={'class': 'form-control', 'rows': 5, 'cols': 20, 'placeholder': 'Ges Vehiculo'}),
+        }
+
+class SolictudPraticaGesVehicleForm(forms.ModelForm):
+    class Meta:
+        model = SolictudPratica
+        fields =[
+            'solp_cvehiculopractica'
+        ]
+        labels = {
+            'solp_cvehiculopractica': 'Ges Vehiculo'
+        }
+        help_texts = {
+            'solp_cvehiculopractica': 'Ges Vehiculo'
+        }
+        widgets = {
+            'solp_cvehiculopractica': forms.Select(attrs={'class': 'form-control', 'rows': 5, 'cols': 20, 'placeholder': 'Ges Vehiculo'})
         }
 
 class VhiculosPracticasForm(forms.ModelForm):

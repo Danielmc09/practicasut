@@ -13,9 +13,13 @@ from academico.models import Grupo,Programa,Materia,PensumMateria,MatriculaGrupo
 from academicoglobal.models import Persona
 from general.models import PersonaGeneral
 
-from .forms import GrupoIntegranteForm,TipoIntegranteForm,LugaresPraticasForm,SolictudPraticaForm,VhiculosPracticasForm,\
-    PersonaIntegranteDocenteForm,PersonaIntegranteConductorForm,RutasPracticaForm,MateriasPracticasForm,AuxiliarPracticaForm,\
-    CostosPraticasForm
+from .forms import GrupoIntegranteForm, TipoIntegranteForm, LugaresPraticasForm, SolictudPraticaForm, \
+    VhiculosPracticasForm, \
+    PersonaIntegranteDocenteForm, PersonaIntegranteConductorForm, RutasPracticaForm, MateriasPracticasForm, \
+    AuxiliarPracticaForm, \
+    CostosPraticasForm, SolictudPraticaGesVehicleForm
+
+
 # Create your views here.
 
 #AGRUPACION DE TIPOS DE INTEGRANTES
@@ -204,36 +208,23 @@ class SolictudPracticasCrear(CreateView):
     def get_context_data(self, **kwargs):
         context = super(SolictudPracticasCrear, self).get_context_data(**kwargs)
         date = datetime.date.today()
-        print('fecha ', date)
         year = date.strftime("%Y")
         context['year'] = year
-        #context['pract'] = self.kwargs.get('pract')
-        ##context['depeid'] = self.kwargs.get('depeid')
-        # pk = self.kwargs.get('pk')
         context['page_title'] = self.page_title
         return context
 
     def post(self, request, *args, **kwargs):
-        #self.object = self.get_object
-        form = self.form_class(request.POST)
-        #print('fromulario: ',form)
-        print(request.POST['solp_numerodias'])
-        print('ayuda: ',request.POST['solp_ayudaeconomica'])
-        if form.is_valid():
-            solicitud = form.save(commit=False)
-            #depeid = self.kwargs.get('depeid')
-            numdias = request.POST['solp_numerodias']
-            print('dias: ',numdias )
-            #cantidad = request.POST['ctpr_cantidad']
-            #vunitario = request.POST['ctpr_costounitario']
-            #solicitud.ctpr_costototalxconcepto = ((int(cantidad)) * (float(vunitario)))
-            duracion = (int(numdias) - (0.5))
-            print('duracion:', duracion)
-            solicitud.solp_duraciondoc = duracion
-            #solicitud.id_solp_id = self.kwargs.get('pk')
-            solicitud.save()
-            return HttpResponseRedirect(reverse_lazy('gestionpratica:solicitudpracticas_listar'))#, kwargs={'pk': depeid}
-
+        try:
+            form = self.form_class(request.POST)
+            if form.is_valid():
+                solicitud = form.save(commit=False)
+                numdias = request.POST['solp_numerodias']
+                duracion = (int(numdias) - (0.5))
+                solicitud.solp_duraciondoc = duracion
+                solicitud.save()
+                return redirect(reverse('gestionpratica:solicitudpracticas_listar'))
+        except ValueError as e:
+            print('Value error', str(e))
 
 
 """class SolictudPracticasEditar(UpdateView):
@@ -263,6 +254,11 @@ class SolictudPracticasCrear(CreateView):
             #mail = correo
             #send_mail(mail, nombre, snombre)
             return HttpResponseRedirect(reverse_lazy('gestionpratica:solicitudpracticas_listar'))"""
+
+class VehicleManagmentView(UpdateView):
+    model = SolictudPratica
+    form_class = SolictudPraticaGesVehicleForm
+
 
 class PracticaDetalle(TemplateView):
     template_name = 'gestionpratica/practica_detallado.html'
@@ -1088,14 +1084,9 @@ def agregarEstudiante(request):
                                                                                       cpxp_unidadmedida='días',
                                                                                       cpxp_costototalconceptopersona=valtotalpractpers)
                 else:
-                    print("no hay ayudas economicas, pr lo cual no se hace nada")
-
-
+                    print("no hay ayudas economicas, por lo cual no se hace nada")
         return HttpResponse("OK")
-
     pass
-
-
 
 #SOLICITUD PRESUPUESTO PRACTICAS
 class SolPresupuestoListar(ListView):

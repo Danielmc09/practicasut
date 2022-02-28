@@ -1,12 +1,15 @@
 from django.urls import path
 
-from .views import GrupoIntegranteListar,GrupoIntegranteCrear,GrupoIntegranteEditar,TipoIntegranteListar,\
-    TipoIntegranteCrear,TipoIntegranteEditar,LugaresPraticasListar,LugaresPraticasCrear,LugaresPraticasEditar,\
-    SolictudPracticasListar,SolictudPracticasCrear,PracticaDetalle,VehiculoPracticasListar,\
-    VehiculoPracticaCrear,DocenteBuscar,DocenteBusarcarAdd,DocentePractica,ConductorBusarcarAdd,ConductorPractica,\
-    RutasPraticasListar,RutasPraticasCrear,MateriaPraticasListar,MateriasBusarcarAdd,MateriasPracticaCrear,GruposList,\
-    MatriculaGrupoPersonaListar,agregarEstudiante,DocentePracticasListar,ConductorPracticasListar,AuxiliarPracticasListar,\
-    AuxiliarBusarcarAdd,AuxiliarPractica,CostosPraticasListar,CostosPraticasCrear
+from .views import GrupoIntegranteListar, GrupoIntegranteCrear, GrupoIntegranteEditar, TipoIntegranteListar, \
+    TipoIntegranteCrear, TipoIntegranteEditar, LugaresPraticasListar, LugaresPraticasCrear, LugaresPraticasEditar, \
+    SolictudPracticasListar, SolictudPracticasCrear, PracticaDetalle, VehiculoPracticasListar, \
+    VehiculoPracticaCrear, DocenteBuscar, DocenteBusarcarAdd, DocentePractica, ConductorBusarcarAdd, ConductorPractica, \
+    RutasPraticasListar, RutasPraticasCrear, MateriaPraticasListar, MateriasBusarcarAdd, MateriasPracticaCrear, \
+    GruposList, \
+    MatriculaGrupoPersonaListar, agregarEstudiante, DocentePracticasListar, ConductorPracticasListar, \
+    AuxiliarPracticasListar, \
+    AuxiliarBusarcarAdd, AuxiliarPractica, CostosPraticasListar, CostosPraticasCrear, VehicleManagmentView
+
 #SolictudPracticasEditar,
 app_name = 'gestionpratica'
 
@@ -46,4 +49,7 @@ urlpatterns = [
     path('gruposmaterialistar/<int:pk>/<codigomateria>', GruposList.as_view(), name = 'gruposmateria_listar'),
     path('matriculagrupospersonalistar/<int:pk>/<codmate>/<int:grupoid>', MatriculaGrupoPersonaListar.as_view(), name = 'matriculagrupopersona_listar'),
     path('agregarestudiantes', agregarEstudiante, name = 'agregarestudiantes'),
+    #Gestion de Vehiculo
+    path('vehicle_managment/', VehicleManagmentView.as_view(), name='vehicle_managment'),
+
 ]
