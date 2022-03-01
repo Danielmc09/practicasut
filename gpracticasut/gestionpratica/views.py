@@ -1,15 +1,16 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponse,HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 import datetime
-from django.views.generic import View, ListView, CreateView,UpdateView,FormView,TemplateView,DeleteView,DetailView
+from django.views.generic import View, ListView, CreateView, UpdateView, FormView, TemplateView, DeleteView, DetailView
 
-from .models import GrupoIntegrante,TipoIntegrante,ConceptosPraticas,LugaresPraticas,SolictudPratica,PersonaIntegrante,\
-    VhiculosPracticas,CostosPraticas,CostoPracticaPersona,RutasPractica,MateriasPracticas
+from .models import GrupoIntegrante, TipoIntegrante, ConceptosPraticas, LugaresPraticas, SolictudPratica, \
+    PersonaIntegrante, \
+    VhiculosPracticas, CostosPraticas, CostoPracticaPersona, RutasPractica, MateriasPracticas
 
-from academico.models import Grupo,Programa,Materia,PensumMateria,MatriculaGrupoPersona
+from academico.models import Grupo, Programa, Materia, PensumMateria, MatriculaGrupoPersona
 from academicoglobal.models import Persona
 from general.models import PersonaGeneral
 
@@ -22,11 +23,12 @@ from .forms import GrupoIntegranteForm, TipoIntegranteForm, LugaresPraticasForm,
 
 # Create your views here.
 
-#AGRUPACION DE TIPOS DE INTEGRANTES
+# AGRUPACION DE TIPOS DE INTEGRANTES
 
 class GrupoIntegranteListar(ListView):
     model = GrupoIntegrante
     template_name = 'gestionpratica/grupointegrante_list.html'
+
 
 class GrupoIntegranteCrear(CreateView):
     model = GrupoIntegrante
@@ -40,6 +42,7 @@ class GrupoIntegranteCrear(CreateView):
         context = super(GrupoIntegranteCrear, self).get_context_data(**kwargs)
         context['page_title'] = self.page_title
         return context
+
 
 class GrupoIntegranteEditar(UpdateView):
     model = GrupoIntegrante
@@ -55,12 +58,12 @@ class GrupoIntegranteEditar(UpdateView):
         return context
 
 
-
-#TIPO DE INTEGRANTES
+# TIPO DE INTEGRANTES
 
 class TipoIntegranteListar(ListView):
     model = TipoIntegrante
     template_name = 'gestionpratica/tipointegrante_list.html'
+
 
 class TipoIntegranteCrear(CreateView):
     model = TipoIntegrante
@@ -74,6 +77,7 @@ class TipoIntegranteCrear(CreateView):
         context = super(TipoIntegranteCrear, self).get_context_data(**kwargs)
         context['page_title'] = self.page_title
         return context
+
 
 class TipoIntegranteEditar(UpdateView):
     model = TipoIntegrante
@@ -89,11 +93,12 @@ class TipoIntegranteEditar(UpdateView):
         return context
 
 
-#LUGARES PRACTICAS
+# LUGARES PRACTICAS
 
 class LugaresPraticasListar(ListView):
     model = LugaresPraticas
     template_name = 'gestionpratica/lugarespracticas_list.html'
+
 
 class LugaresPraticasCrear(CreateView):
     model = LugaresPraticas
@@ -107,6 +112,7 @@ class LugaresPraticasCrear(CreateView):
         context = super(LugaresPraticasCrear, self).get_context_data(**kwargs)
         context['page_title'] = self.page_title
         return context
+
 
 class LugaresPraticasEditar(UpdateView):
     model = LugaresPraticas
@@ -122,11 +128,12 @@ class LugaresPraticasEditar(UpdateView):
         return context
 
 
-#CREAR PRACTICAS
+# CREAR PRACTICAS
 
 class SolictudPracticasListar(ListView):
     model = SolictudPratica
     template_name = 'gestionpratica/solicitudpracticas_list.html'
+
 
 """class SolictudPracticasCrear(CreateView):
     model = SolictudPratica
@@ -161,7 +168,6 @@ class SolictudPracticasListar(ListView):
             #mail = correo
             #send_mail(mail, nombre, snombre)
             return HttpResponseRedirect(reverse_lazy('gestionpratica:solicitudpracticas_listar'))"""
-
 
 """class SolictudPracticasCrear(CreateView):
     model = SolictudPratica
@@ -227,6 +233,35 @@ class SolictudPracticasCrear(CreateView):
             print('Value error', str(e))
 
 
+class SolictudPracticasUpdate(UpdateView):
+    model = SolictudPratica
+    form_class = SolictudPraticaForm
+    template_name = 'gestionpratica/solicitudpracticasupdate_form.html'
+    success_url = reverse_lazy('gestionpratica:solicitudpracticas_listar')
+    page_title = 'ACTUALIZAR PRATICAS'
+    context_object_name = 'obj'
+
+    def get_context_data(self, **kwargs):
+        context = super(SolictudPracticasUpdate, self).get_context_data(**kwargs)
+        date = datetime.date.today()
+        year = date.strftime("%Y")
+        context['year'] = year
+        context['page_title'] = self.page_title
+        return context
+
+    def post(self, request, *args, **kwargs):
+        try:
+            form = self.form_class(request.POST)
+            if form.is_valid():
+                solicitud = form.save(commit=False)
+                numdias = request.POST['solp_numerodias']
+                duracion = (int(numdias) - (0.5))
+                solicitud.solp_duraciondoc = duracion
+                solicitud.save()
+                return redirect(reverse('gestionpratica:solicitudpracticas_listar'))
+        except ValueError as e:
+            print('Value error', str(e))
+
 """class SolictudPracticasEditar(UpdateView):
     model = SolictudPratica
     form_class = SolictudPraticaForm
@@ -255,6 +290,7 @@ class SolictudPracticasCrear(CreateView):
             #send_mail(mail, nombre, snombre)
             return HttpResponseRedirect(reverse_lazy('gestionpratica:solicitudpracticas_listar'))"""
 
+
 class VehicleManagmentView(UpdateView):
     model = SolictudPratica
     form_class = SolictudPraticaGesVehicleForm
@@ -265,19 +301,19 @@ class PracticaDetalle(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(PracticaDetalle, self).get_context_data(**kwargs)
-        #print('foranea;', self.kwargs.get('pk'))
+        # print('foranea;', self.kwargs.get('pk'))
         solpractica = SolictudPratica.objects.filter(solp_id=self.kwargs.get('pk')).first()
-        #docenpracticas = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'),tiin_id = 1)
-        #condupracticas = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'), tiin_id=2)
-        #estidiantepracticas = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'), tiin_id=3)
+        # docenpracticas = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'),tiin_id = 1)
+        # condupracticas = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'), tiin_id=2)
+        # estidiantepracticas = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'), tiin_id=3)
         integrantepracticas = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'))
         todointegrante = CostoPracticaPersona.objects.filter(solp_id=self.kwargs.get('pk')).order_by('pein_id')
         contartodos = CostoPracticaPersona.objects.filter(solp_id=self.kwargs.get('pk')).count()
         vehiculopracticas = VhiculosPracticas.objects.filter(solp_id=self.kwargs.get('pk'))
         rutaspracticas = RutasPractica.objects.filter(solp_id=self.kwargs.get('pk'))
-        apolloestudiante = CostosPraticas.objects.filter(solp_id=self.kwargs.get('pk'),copr_id=3).first()
-        costodocentes = CostosPraticas.objects.filter(solp_id=self.kwargs.get('pk'),copr_id=1).first()
-        costoauxiliar = CostosPraticas.objects.filter(solp_id=self.kwargs.get('pk'),copr_id=22).first()
+        apolloestudiante = CostosPraticas.objects.filter(solp_id=self.kwargs.get('pk'), copr_id=3).first()
+        costodocentes = CostosPraticas.objects.filter(solp_id=self.kwargs.get('pk'), copr_id=1).first()
+        costoauxiliar = CostosPraticas.objects.filter(solp_id=self.kwargs.get('pk'), copr_id=22).first()
         costoconductores = CostosPraticas.objects.filter(solp_id=self.kwargs.get('pk'), copr_id=2).first()
         costocombustible = CostosPraticas.objects.filter(solp_id=self.kwargs.get('pk'), copr_id=4).first()
         costopeajes = CostosPraticas.objects.filter(solp_id=self.kwargs.get('pk'), copr_id=5).first()
@@ -318,26 +354,27 @@ class PracticaDetalle(TemplateView):
             votros = 0
         totaldocencia = (vdocente + vauxiliar)
         totaltransporte = (vconductores + vconbustible + vpeajes + vimprevistos)
-        totalpratica = (vdocente + vauxiliar + vconductores + vestudientes + vconbustible + vpeajes + vimprevistos + votros )
+        totalpratica = (
+                    vdocente + vauxiliar + vconductores + vestudientes + vconbustible + vpeajes + vimprevistos + votros)
 
-        #print('solictu practica: ',solpractica)
+        # print('solictu practica: ',solpractica)
         context['pk'] = self.kwargs.get('pk')
         context['solpractica'] = solpractica
-        #context['docenpracticas'] = docenpracticas
-        #context['condupracticas'] = condupracticas
-        #context['estidiantepracticas'] = estidiantepracticas
+        # context['docenpracticas'] = docenpracticas
+        # context['condupracticas'] = condupracticas
+        # context['estidiantepracticas'] = estidiantepracticas
         context['integrantepracticas'] = integrantepracticas
         context['todointegrante'] = todointegrante
         context['contartodos'] = contartodos
         context['vehiculopracticas'] = vehiculopracticas
         context['rutaspracticas'] = rutaspracticas
         context['apolloestudiante'] = apolloestudiante
-        #****
+        # ****
         context['vdocente'] = vdocente
         context['vauxiliar'] = vauxiliar
         context['vconductores'] = vconductores
         context['vestudientes'] = vestudientes
-        context['vconbustible']= vconbustible
+        context['vconbustible'] = vconbustible
         context['vpeajes'] = vpeajes
         context['vimprevistos'] = vimprevistos
         context['votros'] = votros
@@ -365,7 +402,7 @@ class VehiculoPracticaCrear(CreateView):
     model = VhiculosPracticas
     form_class = VhiculosPracticasForm
     template_name = 'gestionpratica/vehiculopractica_add2.html'
-    #success_url = reverse_lazy('pbdeportivas:datosantrop')
+    # success_url = reverse_lazy('pbdeportivas:datosantrop')
     page_title = 'Adicionar Vehiculo'
     context_object_name = 'obj'
 
@@ -382,12 +419,12 @@ class VehiculoPracticaCrear(CreateView):
         if form.is_valid():
             solicitud = form.save(commit=False)
             pk = self.kwargs.get('pk')
-            #solicitud.id_solp_id = self.kwargs.get('pk')
+            # solicitud.id_solp_id = self.kwargs.get('pk')
             solicitud.save()
             return HttpResponseRedirect(reverse_lazy('gestionpratica:vehiculopractica_list', kwargs={'pk': pk}))
 
 
-#DOCENTES PRACTICAS
+# DOCENTES PRACTICAS
 class DocenteBuscar(TemplateView):
     template_name = 'gestionpratica/docente_persona.html'
 
@@ -397,15 +434,16 @@ class DocenteBuscar(TemplateView):
 
         if request.method == 'POST':
             print(request.POST)
-            #if request.POST['documento']:
+            # if request.POST['documento']:
             cdocumento = request.POST['documento']
             persona = Persona.objects.filter(pers_documentoidentidad=cdocumento)
+
             def get_context_data(self, **kwargs):
                 context = super(VehiculoPracticaCrear, self).get_context_data(**kwargs)
                 context['pk'] = self.kwargs.get('pk')
                 context['persona'] = persona
                 return context
-            #else:
+            # else:
             #    print('no hay datos')
 
 
@@ -416,36 +454,35 @@ class DocentePracticasListar(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(DocentePracticasListar, self).get_context_data(**kwargs)
-        #tiin_id.grin_id.grin_nombre
+        # tiin_id.grin_id.grin_nombre
         context['pk'] = self.kwargs.get('pk')
         context['page_title'] = self.page_title
-        context['docentes'] = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'),tiin_id__in=(1,2))
+        context['docentes'] = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'), tiin_id__in=(1, 2))
         return context
 
-def DocenteBusarcarAdd(request,pk):
+
+def DocenteBusarcarAdd(request, pk):
     dd = pk
     print('primaria ', dd)
     if request.method == 'POST':
         print(request.POST)
-        #if request.POST['documento']:
+        # if request.POST['documento']:
         cdocumento = request.POST['documento']
         print('documento llegado: ', cdocumento)
     else:
         cdocumento = ''
-    persona = Persona.objects.filter(pers_documentoidentidad= cdocumento)
+    persona = Persona.objects.filter(pers_documentoidentidad=cdocumento)
     print('datos persona', persona)
-    #print('datos persona', persona.pers_primernombre)
-
+    # print('datos persona', persona.pers_primernombre)
 
     page_title = 'Asignar Docente a la Practica'
     context = {
         'page_title': page_title,
-        'persona':persona,
+        'persona': persona,
         'dd': dd
 
     }
     return render(request, 'gestionpratica/docente_persona.html', context)
-
 
 
 class DocentePractica(CreateView):
@@ -478,7 +515,7 @@ class DocentePractica(CreateView):
             solicitud.save()
             personain = solicitud.pein_id
             personainte = PersonaIntegrante.objects.only('pein_id').get(pein_id=personain)
-            print('persona gurdadad: ',personain)
+            print('persona gurdadad: ', personain)
             print('**************************entra a consultar tablas ********************')
             solpracticas = SolictudPratica.objects.filter(solp_id=practica).first()
             print('practica: ', solpracticas)
@@ -490,7 +527,7 @@ class DocentePractica(CreateView):
             conceptopractica = ConceptosPraticas.objects.filter(copr_requierebase=1, copr_estado=1, copr_id=1).first()
             valorbasepract = conceptopractica.copr_valorbase
             conceptopracticaid = conceptopractica.copr_id
-            print('valor base concepto: ',valorbasepract)
+            print('valor base concepto: ', valorbasepract)
             conprac = ConceptosPraticas.objects.only('copr_id').get(copr_requierebase=1, copr_estado=1, copr_id=1)
 
             print('**************************entra registrar costos practicas ********************')
@@ -501,7 +538,7 @@ class DocentePractica(CreateView):
                 guardarcostopractica = CostosPraticas.objects.filter(solp_id=practica, copr_id=1).update(
                     ctpr_cantidad=cantidad,
                     ctpr_costototalxconcepto=valtotalpract)
-                #idguardarcostopractica = guardarcostopractica.ctpr_id
+                # idguardarcostopractica = guardarcostopractica.ctpr_id
             else:
                 valtotalpract = (1 * practicafac * valorbasepract)
                 guardarcostopractica = CostosPraticas.objects.create(solp_id=solpract, copr_id=conprac, ctpr_cantidad=1,
@@ -521,13 +558,13 @@ class DocentePractica(CreateView):
                                                                                   cpxp_unidadfactor=practicafac,
                                                                                   cpxp_unidadmedida='facduracion',
                                                                                   cpxp_costototalconceptopersona=(
-                                                                                              valorbasepract * practicafac))
+                                                                                          valorbasepract * practicafac))
                 guardarcostopracticapersonaid = guardarcostopracticapersona.cpxp_id
 
             return HttpResponseRedirect(reverse_lazy('gestionpratica:docentepractica_list', kwargs={'pk': pk}))
 
 
-#AUXLIAR PRACTICA
+# AUXLIAR PRACTICA
 
 class AuxiliarPracticasListar(ListView):
     model = PersonaIntegrante
@@ -536,36 +573,35 @@ class AuxiliarPracticasListar(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(AuxiliarPracticasListar, self).get_context_data(**kwargs)
-        #tiin_id.grin_id.grin_nombre
+        # tiin_id.grin_id.grin_nombre
         context['pk'] = self.kwargs.get('pk')
         context['page_title'] = self.page_title
-        context['auxiliar'] = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'),tiin_id =3)
+        context['auxiliar'] = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'), tiin_id=3)
         return context
 
-def AuxiliarBusarcarAdd(request,pk):
+
+def AuxiliarBusarcarAdd(request, pk):
     dd = pk
     print('primaria ', dd)
     if request.method == 'POST':
         print(request.POST)
-        #if request.POST['documento']:
+        # if request.POST['documento']:
         cdocumento = request.POST['documento']
         print('documento llegado: ', cdocumento)
     else:
         cdocumento = ''
-    persona = Persona.objects.filter(pers_documentoidentidad= cdocumento)
+    persona = Persona.objects.filter(pers_documentoidentidad=cdocumento)
     print('datos persona', persona)
-    #print('datos persona', persona.pers_primernombre)
-
+    # print('datos persona', persona.pers_primernombre)
 
     page_title = 'Asignar Auxilar a la Practica'
     context = {
         'page_title': page_title,
-        'persona':persona,
+        'persona': persona,
         'dd': dd
 
     }
     return render(request, 'gestionpratica/auxiliar_persona.html', context)
-
 
 
 class AuxiliarPractica(CreateView):
@@ -598,7 +634,7 @@ class AuxiliarPractica(CreateView):
             solicitud.save()
             personain = solicitud.pein_id
             personainte = PersonaIntegrante.objects.only('pein_id').get(pein_id=personain)
-            print('persona gurdadad: ',personain)
+            print('persona gurdadad: ', personain)
             print('**************************entra a consultar tablas ********************')
             solpracticas = SolictudPratica.objects.filter(solp_id=practica).first()
             print('practica: ', solpracticas)
@@ -610,7 +646,7 @@ class AuxiliarPractica(CreateView):
             conceptopractica = ConceptosPraticas.objects.filter(copr_requierebase=1, copr_estado=1, copr_id=22).first()
             valorbasepract = conceptopractica.copr_valorbase
             conceptopracticaid = conceptopractica.copr_id
-            print('valor base concepto: ',valorbasepract)
+            print('valor base concepto: ', valorbasepract)
             conprac = ConceptosPraticas.objects.only('copr_id').get(copr_requierebase=1, copr_estado=1, copr_id=22)
 
             print('**************************entra registrar costos practicas ********************')
@@ -621,7 +657,7 @@ class AuxiliarPractica(CreateView):
                 guardarcostopractica = CostosPraticas.objects.filter(solp_id=practica, copr_id=22).update(
                     ctpr_cantidad=cantidad,
                     ctpr_costototalxconcepto=valtotalpract)
-                #idguardarcostopractica = guardarcostopractica.ctpr_id
+                # idguardarcostopractica = guardarcostopractica.ctpr_id
             else:
                 valtotalpract = (1 * practicafac * valorbasepract)
                 guardarcostopractica = CostosPraticas.objects.create(solp_id=solpract, copr_id=conprac, ctpr_cantidad=1,
@@ -641,13 +677,13 @@ class AuxiliarPractica(CreateView):
                                                                                   cpxp_unidadfactor=practicafac,
                                                                                   cpxp_unidadmedida='facduracion',
                                                                                   cpxp_costototalconceptopersona=(
-                                                                                              valorbasepract * practicafac))
+                                                                                          valorbasepract * practicafac))
                 guardarcostopracticapersonaid = guardarcostopracticapersona.cpxp_id
 
             return HttpResponseRedirect(reverse_lazy('gestionpratica:auxiliarpractica_list', kwargs={'pk': pk}))
 
 
-#CONDUCTOR PARCTICA
+# CONDUCTOR PARCTICA
 class ConductorPracticasListar(ListView):
     model = PersonaIntegrante
     page_title = 'Conductor Asignados a la Práctica'
@@ -655,31 +691,31 @@ class ConductorPracticasListar(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ConductorPracticasListar, self).get_context_data(**kwargs)
-        #tiin_id.grin_id.grin_nombre
+        # tiin_id.grin_id.grin_nombre
         context['pk'] = self.kwargs.get('pk')
         context['page_title'] = self.page_title
-        context['conductor'] = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'),tiin_id__in=(4,21))
+        context['conductor'] = PersonaIntegrante.objects.filter(solp_id=self.kwargs.get('pk'), tiin_id__in=(4, 21))
         return context
 
-def ConductorBusarcarAdd(request,pk):
+
+def ConductorBusarcarAdd(request, pk):
     dd = pk
     print('primaria ', dd)
     if request.method == 'POST':
         print(request.POST)
-        #if request.POST['documento']:
+        # if request.POST['documento']:
         cdocumento = request.POST['documento']
         print('documento llegado: ', cdocumento)
     else:
         cdocumento = ''
-    persona = Persona.objects.filter(pers_documentoidentidad= cdocumento)
+    persona = Persona.objects.filter(pers_documentoidentidad=cdocumento)
     print('datos persona', persona)
-    #print('datos persona', persona.pers_primernombre)
-
+    # print('datos persona', persona.pers_primernombre)
 
     page_title = 'Asignar Conductor a la Practica'
     context = {
         'page_title': page_title,
-        'persona':persona,
+        'persona': persona,
         'dd': dd
 
     }
@@ -716,7 +752,7 @@ class ConductorPractica(CreateView):
             solicitud.save()
             personain = solicitud.pein_id
             personainte = PersonaIntegrante.objects.only('pein_id').get(pein_id=personain)
-            print('persona gurdadad: ',personain)
+            print('persona gurdadad: ', personain)
             print('**************************entra a consultar tablas ********************')
             solpracticas = SolictudPratica.objects.filter(solp_id=practica).first()
             print('practica: ', solpracticas)
@@ -728,7 +764,7 @@ class ConductorPractica(CreateView):
             conceptopractica = ConceptosPraticas.objects.filter(copr_requierebase=1, copr_estado=1, copr_id=2).first()
             valorbasepract = conceptopractica.copr_valorbase
             conceptopracticaid = conceptopractica.copr_id
-            print('valor base concepto: ',valorbasepract)
+            print('valor base concepto: ', valorbasepract)
             conprac = ConceptosPraticas.objects.only('copr_id').get(copr_requierebase=1, copr_estado=1, copr_id=2)
 
             print('**************************entra registrar costos practicas ********************')
@@ -739,7 +775,7 @@ class ConductorPractica(CreateView):
                 guardarcostopractica = CostosPraticas.objects.filter(solp_id=practica, copr_id=2).update(
                     ctpr_cantidad=cantidad,
                     ctpr_costototalxconcepto=valtotalpract)
-                #idguardarcostopractica = guardarcostopractica.ctpr_id
+                # idguardarcostopractica = guardarcostopractica.ctpr_id
             else:
                 valtotalpract = (1 * practicafac * valorbasepract)
                 guardarcostopractica = CostosPraticas.objects.create(solp_id=solpract, copr_id=conprac, ctpr_cantidad=1,
@@ -759,13 +795,13 @@ class ConductorPractica(CreateView):
                                                                                   cpxp_unidadfactor=practicafac,
                                                                                   cpxp_unidadmedida='facduracion',
                                                                                   cpxp_costototalconceptopersona=(
-                                                                                              valorbasepract * practicafac))
+                                                                                          valorbasepract * practicafac))
                 guardarcostopracticapersonaid = guardarcostopracticapersona.cpxp_id
 
             return HttpResponseRedirect(reverse_lazy('gestionpratica:conductorpractica_list', kwargs={'pk': pk}))
 
 
-#RUTAS PRACTICAS
+# RUTAS PRACTICAS
 class RutasPraticasListar(ListView):
     model = RutasPractica
     template_name = 'gestionpratica/rutaspracticas_list.html'
@@ -775,10 +811,11 @@ class RutasPraticasListar(ListView):
         context = super(RutasPraticasListar, self).get_context_data(**kwargs)
         practica = self.kwargs.get('pk')
         context['pract'] = self.kwargs.get('pk')
-        context['rutas'] = RutasPractica.objects.filter(solp_id= practica)
+        context['rutas'] = RutasPractica.objects.filter(solp_id=practica)
         # pk = self.kwargs.get('pk')
         context['page_title'] = self.page_title
         return context
+
 
 class RutasPraticasCrear(CreateView):
     model = RutasPractica
@@ -801,12 +838,12 @@ class RutasPraticasCrear(CreateView):
         if form.is_valid():
             solicitud = form.save(commit=False)
             pract = self.kwargs.get('pract')
-            #solicitud.id_solp_id = self.kwargs.get('pk')
+            # solicitud.id_solp_id = self.kwargs.get('pk')
             solicitud.save()
             return HttpResponseRedirect(reverse_lazy('gestionpratica:rutaspracticas_listar', kwargs={'pk': pract}))
 
 
-#COSTOS PRACTICAS
+# COSTOS PRACTICAS
 class CostosPraticasListar(ListView):
     model = CostosPraticas
     template_name = 'gestionpratica/costospracticas_list.html'
@@ -815,7 +852,7 @@ class CostosPraticasListar(ListView):
     def get_context_data(self, **kwargs):
         context = super(CostosPraticasListar, self).get_context_data(**kwargs)
         practica = self.kwargs.get('pk')
-        context['costos'] = CostosPraticas.objects.filter(solp_id = practica)
+        context['costos'] = CostosPraticas.objects.filter(solp_id=practica)
         context['pract'] = self.kwargs.get('pk')
         # pk = self.kwargs.get('pk')
         context['page_title'] = self.page_title
@@ -846,12 +883,12 @@ class CostosPraticasCrear(CreateView):
             cantidad = request.POST['ctpr_cantidad']
             vunitario = request.POST['ctpr_costounitario']
             solicitud.ctpr_costototalxconcepto = ((int(cantidad)) * (float(vunitario)))
-            #solicitud.id_solp_id = self.kwargs.get('pk')
+            # solicitud.id_solp_id = self.kwargs.get('pk')
             solicitud.save()
             return HttpResponseRedirect(reverse_lazy('gestionpratica:costospracticas_listar', kwargs={'pk': pract}))
 
 
-#Materia
+# Materia
 class MateriaPraticasListar(ListView):
     model = MateriasPracticas
     template_name = 'gestionpratica/materiaspracticas_list.html'
@@ -867,25 +904,24 @@ class MateriaPraticasListar(ListView):
         return context
 
 
-def MateriasBusarcarAdd(request,pk):
+def MateriasBusarcarAdd(request, pk):
     dd = pk
     print('primaria ', dd)
     if request.method == 'POST':
         print(request.POST)
-        #if request.POST['documento']:
+        # if request.POST['documento']:
         cmateria = request.POST['materia']
         print('materia llegado: ', cmateria)
     else:
         cmateria = ''
-    materia = Materia.objects.filter(mate_codigomateria= cmateria)
+    materia = Materia.objects.filter(mate_codigomateria=cmateria)
     print('datos persona', materia)
-    #print('datos persona', persona.pers_primernombre)
-
+    # print('datos persona', persona.pers_primernombre)
 
     page_title = 'Asignar Materia a la Practica'
     context = {
         'page_title': page_title,
-        'materia':materia,
+        'materia': materia,
         'dd': dd
 
     }
@@ -904,7 +940,7 @@ class MateriasPracticaCrear(CreateView):
         context = super(MateriasPracticaCrear, self).get_context_data(**kwargs)
         context['pk'] = self.kwargs.get('pk')
         context['codigomateria'] = self.kwargs.get('codigomateria')
-        #context['pege'] = self.kwargs.get('pege')
+        # context['pege'] = self.kwargs.get('pege')
         context['page_title'] = self.page_title
         return context
 
@@ -914,15 +950,17 @@ class MateriasPracticaCrear(CreateView):
         if form.is_valid():
             solicitud = form.save(commit=False)
             pract = self.kwargs.get('pk')
-            #solicitud.id_solp_id = self.kwargs.get('pk')
+            # solicitud.id_solp_id = self.kwargs.get('pk')
             solicitud.save()
             return HttpResponseRedirect(reverse_lazy('gestionpratica:materiaspracticas_listar', kwargs={'pk': pract}))
 
+
 class GruposList(TemplateView):
-    #model = NivelEducativo
+    # model = NivelEducativo
     template_name = 'gestionpratica/grupospracticas_form.html'
     page_title = 'Seleccionar Grupo'
-    #queryset = NivelEducativo.objects.filter(nied_estado = 1)
+
+    # queryset = NivelEducativo.objects.filter(nied_estado = 1)
 
     def get_context_data(self, *args, **kwargs):
         context = super(GruposList, self).get_context_data(**kwargs)
@@ -931,7 +969,7 @@ class GruposList(TemplateView):
         periodou = SolictudPratica.objects.only('peun_id').get(solp_id=self.kwargs.get('pk'))
         periodou = periodou.peun_id.peun_id
         print('periodo universidad: ', periodou)
-        context['grupos'] = Grupo.objects.filter(peun_id = periodou, mate_codigomateria = codigomateria)
+        context['grupos'] = Grupo.objects.filter(peun_id=periodou, mate_codigomateria=codigomateria)
         context['page_title'] = self.page_title
         context['codigomateria'] = codigomateria
         print(context['grupos'])
@@ -947,8 +985,8 @@ class GruposList(TemplateView):
             codigomateria = self.kwargs.get('codigomateria')
             gruposid = request.POST['m_option_1']
             return HttpResponseRedirect(
-                reverse_lazy('gestionpratica:matriculagrupopersona_listar', kwargs={'pk': pract, 'codmate': codigomateria, 'grupoid': gruposid}))
-
+                reverse_lazy('gestionpratica:matriculagrupopersona_listar',
+                             kwargs={'pk': pract, 'codmate': codigomateria, 'grupoid': gruposid}))
 
     """def post(self, request, *args, **kwargs):
         #context = super(GruposList, self).get_context_data(**kwargs)
@@ -963,11 +1001,9 @@ class GruposList(TemplateView):
             return HttpResponseRedirect(reverse_lazy('gestionpratica:matriculagrupopersona_listar', kwargs={'pk': pract, 'grupoid': gruposid}))"""
 
 
-
 class MatriculaGrupoPersonaListar(TemplateView):
     model = MatriculaGrupoPersona
     template_name = 'gestionpratica/matriculagrupopersona_list.html'
-
 
     def get_context_data(self, *args, **kwargs):
         context = super(MatriculaGrupoPersonaListar, self).get_context_data(**kwargs)
@@ -976,7 +1012,7 @@ class MatriculaGrupoPersonaListar(TemplateView):
         context['pk'] = self.kwargs.get('pk')
         context['grupoid'] = grupoid
         context['codigomateria'] = codigomateria
-        context['estudiantesgpr'] = MatriculaGrupoPersona.objects.filter(grup_id = grupoid)
+        context['estudiantesgpr'] = MatriculaGrupoPersona.objects.filter(grup_id=grupoid)
         return context
 
     """def post(self, request, *args, **kwargs):
@@ -1006,44 +1042,44 @@ class MatriculaGrupoPersonaListar(TemplateView):
 
 def agregarEstudiante(request):
     if request.method == 'POST' and request.is_ajax():
-        print('este es el post: ',request.POST)
+        print('este es el post: ', request.POST)
         ids = request.POST.getlist("ids[]")
-        print('esto llega: ',ids)
+        print('esto llega: ', ids)
         grupo = request.POST['grupid']
-        print('este es el grupo: ',grupo)
+        print('este es el grupo: ', grupo)
         materia = request.POST['mateid']
         print('este es el grupo: ', materia)
         practica = request.POST['practid']
         print('este es el grupo: ', practica)
         cat_change = Persona.objects.filter(pers_documentoidentidad__in=ids)
-        print('todos los ids: ',cat_change)
+        print('todos los ids: ', cat_change)
         tipopersona = TipoIntegrante.objects.only('tiin_id').get(tiin_nombre='ESTUDIANTE')
         solpract = SolictudPratica.objects.only('solp_id').get(solp_id=practica)
         numdias = solpract.solp_numerodias
         ayudaeconomica = solpract.solp_ayudaeconomica
         fullviaje = solpract.solp_idayregreso
         grupos = Grupo.objects.only('grup_id').get(grup_id=grupo)
-        materias = MateriasPracticas.objects.only('mapr_id').get(mate_codigomateria=materia,solp_id=practica)
+        materias = MateriasPracticas.objects.only('mapr_id').get(mate_codigomateria=materia, solp_id=practica)
         conprac = ConceptosPraticas.objects.only('copr_id').get(copr_requierebase=1, copr_estado=1, copr_id=3)
         valorbasepract = conprac.copr_valorbase
         conceptopracticaid = conprac.copr_id
         for item in cat_change:
             persid = Persona.objects.only('pers_id').get(pers_id=item.pers_id)
-            #persid = item.pers_id
+            # persid = item.pers_id
             pege = item.pege_id.pege_id
-            print('persona general: ',pege)
+            print('persona general: ', pege)
             pegeid = PersonaGeneral.objects.only('pege_id').get(pege_id=pege)
-            #pegeid = item.pege_id.pege_id
-            #solpid = pract
-            #grupopersona = TipoIntegrante.objects.filter(tiin_nombre='ESTUDIANTE').first()
-            #tiinid = grupopersona.tiin_id
+            # pegeid = item.pege_id.pege_id
+            # solpid = pract
+            # grupopersona = TipoIntegrante.objects.filter(tiin_nombre='ESTUDIANTE').first()
+            # tiinid = grupopersona.tiin_id
             print('persona id: ', persid)
             print('persona pege: ', pegeid)
-            print('pratica: ',solpract.solp_id)
-            print('grupo: ',grupos)
-            print('materia: ',materias)
-            #print('solicitud id: ', solpid)
-            #print('persona tipo: ', tiinid)
+            print('pratica: ', solpract.solp_id)
+            print('grupo: ', grupos)
+            print('materia: ', materias)
+            # print('solicitud id: ', solpid)
+            # print('persona tipo: ', tiinid)
             persona = PersonaIntegrante.objects.filter(solp_id=solpract, pers_id=item.pers_id).first()
             if persona:
                 print("la persona ya esta agragada a la practica")
@@ -1088,7 +1124,8 @@ def agregarEstudiante(request):
         return HttpResponse("OK")
     pass
 
-#SOLICITUD PRESUPUESTO PRACTICAS
+
+# SOLICITUD PRESUPUESTO PRACTICAS
 class SolPresupuestoListar(ListView):
     model = RutasPractica
     template_name = 'gestionpratica/rutaspracticas_list.html'
@@ -1098,10 +1135,11 @@ class SolPresupuestoListar(ListView):
         context = super(RutasPraticasListar, self).get_context_data(**kwargs)
         practica = self.kwargs.get('pk')
         context['pract'] = self.kwargs.get('pk')
-        context['rutas'] = RutasPractica.objects.filter(solp_id= practica)
+        context['rutas'] = RutasPractica.objects.filter(solp_id=practica)
         # pk = self.kwargs.get('pk')
         context['page_title'] = self.page_title
         return context
+
 
 class SolPresupuestoCrear(CreateView):
     model = RutasPractica
@@ -1124,6 +1162,6 @@ class SolPresupuestoCrear(CreateView):
         if form.is_valid():
             solicitud = form.save(commit=False)
             pract = self.kwargs.get('pract')
-            #solicitud.id_solp_id = self.kwargs.get('pk')
+            # solicitud.id_solp_id = self.kwargs.get('pk')
             solicitud.save()
             return HttpResponseRedirect(reverse_lazy('gestionpratica:rutaspracticas_listar', kwargs={'pk': pract}))

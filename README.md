@@ -2,7 +2,7 @@
 
 - [x] Sacar gestion de vehiculo del formulario ️
 - [x] Poner mensaje al agregar los estudiantes
-- [ ] Crear el Update para solicitud de practica ️
+- [x] Crear el Update para solicitud de practica ️
 - [ ] Hacer un CRUD para gestion de vehiculo
 - [ ] Login 
 - [ ] Roles 

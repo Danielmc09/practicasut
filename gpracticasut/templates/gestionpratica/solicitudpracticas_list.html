@@ -51,7 +51,9 @@
 		<td>{{objects.solp_cvehiculopractica}}</td>
 		<td>{{objects.solp_fechainiciopractica}}</td>
 		<td>{{objects.solp_fechafinpractica}}</td>
-		<td><a href="{% url 'gestionpratica:practicas_detalle' objects.solp_id %}" class="btn btn-light-success font-weight-bold py-3 px-6 mb-2 text-center btn-block">Gestionar Practica</a>
+		<td>
+			<a href="{% url 'gestionpratica:practicas_detalle' objects.solp_id %}" class="btn btn-light-success font-weight-bold py-3 px-6 mb-2 text-center btn-block">Gestionar Practica</a>
+			<a href="{% url 'gestionpratica:solicitudpracticas_update' objects.solp_id %}" class="btn btn-light-success font-weight-bold py-3 px-6 mb-2 text-center btn-block">Actualizar practica</a>
 		</td>
 	</tr>
 {% endfor %}
