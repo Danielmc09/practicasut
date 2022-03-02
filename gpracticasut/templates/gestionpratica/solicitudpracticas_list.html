@@ -14,11 +14,6 @@
 {% endblock titlepage %}
 
 {% block buttoncreatenew %}
-	<button type="button"  onclick="abrir_modal_creacion('{% url 'gestionpratica:solicitudpracticas_crear' %}')"
-			class="btn btn-primary font-weight-bolder">
-		{% include 'buttons/buttoncreate.html' %}
-		Nueva solicitud practicas
-	</button>
 	<a href="{% url 'gestionpratica:solicitudpracticas_crear' %}"
 			class="btn btn-primary font-weight-bolder">
 		{% include 'buttons/buttoncreate.html' %}
@@ -53,9 +48,35 @@
 		<td>{{objects.solp_fechafinpractica}}</td>
 		<td>
 			<a href="{% url 'gestionpratica:practicas_detalle' objects.solp_id %}" class="btn btn-light-success font-weight-bold py-3 px-6 mb-2 text-center btn-block">Gestionar Practica</a>
-			<a href="{% url 'gestionpratica:solicitudpracticas_update' objects.solp_id %}" class="btn btn-light-success font-weight-bold py-3 px-6 mb-2 text-center btn-block">Actualizar practica</a>
-		</td>
+			<a href="{% url 'gestionpratica:solicitudpracticas_update' objects.solp_id %}" class="btn btn-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block">Actualizar practica</a>
+			<a href="{% url 'gestionpratica:solicitudpracticas_vehicle' objects.solp_id %}" class="btn btn-light-info font-weight-bold py-3 px-6 mb-2 text-center btn-block">Gestión vehiculo</a>
+		    <a href="{% url 'gestionpratica:solicitudpracticas_delete' objects.solp_id %}" style="display:none;" class="btn btn-light-danger font-weight-bold py-3 px-6 mb-2 text-center btn-block" data-toggle="modal" data-target="#exampleModalCenter">
+                Eliminar practica
+            </a>
+        </td>
 	</tr>
+    <div class="modal fade" id="exampleModalCenter" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar practica</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Estas seguro de eliminar la solicitud de practica {{objects.solp_nombre}} </p>
+            </div>
+            <form action="{% url 'gestionpratica:solicitudpracticas_delete' objects.solp_id %}" method='post'>
+                {% csrf_token %}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
 {% endfor %}
 	</tbody>
 {% endblock datetablelist %}

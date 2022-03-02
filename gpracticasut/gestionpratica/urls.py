@@ -7,7 +7,8 @@ from .views import GrupoIntegranteListar, GrupoIntegranteCrear, GrupoIntegranteE
     RutasPraticasListar, RutasPraticasCrear, MateriaPraticasListar, MateriasBusarcarAdd, MateriasPracticaCrear, \
     GruposList, MatriculaGrupoPersonaListar, agregarEstudiante, DocentePracticasListar, ConductorPracticasListar, \
     AuxiliarPracticasListar, AuxiliarBusarcarAdd, AuxiliarPractica, CostosPraticasListar, CostosPraticasCrear, \
-    VehicleManagmentView, SolictudPracticasUpdate
+    VehicleManagmentView, SolictudPracticasUpdateView, SolictudPracticasDeleteView, \
+    SolictudPracticasGestionVehicleUpdateView
 
 # SolictudPracticasEditar,
 app_name = 'gestionpratica'
@@ -24,7 +25,9 @@ urlpatterns = [
     path('lugarespracticaseditar/<int:pk>', LugaresPraticasEditar.as_view(), name='lugarespracticas_editar'),
     path('solicitudpracticas/', SolictudPracticasListar.as_view(), name='solicitudpracticas_listar'),
     path('solicitudpracticasnuevo/', SolictudPracticasCrear.as_view(), name='solicitudpracticas_crear'),
-    path('solicitudpracticasupdate/<int:pk>', SolictudPracticasUpdate.as_view(), name='solicitudpracticas_update'),
+    path('solicitudpracticasupdate/<int:pk>', SolictudPracticasUpdateView.as_view(), name='solicitudpracticas_update'),
+    path('solicitudpracticas_vehicle/<int:pk>', SolictudPracticasGestionVehicleUpdateView.as_view(), name='solicitudpracticas_vehicle'),
+    path('solicitudpracticasdelete/<int:pk>', SolictudPracticasDeleteView.as_view(), name='solicitudpracticas_delete'),
     # path('solicitudpracticaseditar/<int:pk>', SolictudPracticasEditar.as_view(), name = 'solicitudpracticas_editar'),
     path('practicadetallado/<int:pk>', PracticaDetalle.as_view(), name='practicas_detalle'),
     path('vehiculopractica/<int:pk>', VehiculoPracticasListar.as_view(), name='vehiculopractica_list'),

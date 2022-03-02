@@ -3,10 +3,12 @@
 - [x] Sacar gestion de vehiculo del formulario ️
 - [x] Poner mensaje al agregar los estudiantes
 - [x] Crear el Update para solicitud de practica ️
-- [ ] Hacer un CRUD para gestion de vehiculo
+- [ ] Crear el Activate/Deactivate para solicitud de practica ️
+- [x] Hacer un UPDATE para gestion de vehiculo
 - [ ] Login 
 - [ ] Roles 
 - [ ] Gestionar vehiculo que no tenga practica programada en esas fechas 
+
 ## Roles
 - 1. Secretario acaddemico - crea practica y adisiona la materia
 - 2. Servicios administrativo dice si el vehiculo es propio o alquilado y adiciona el cehiculo y gestiona los conductores

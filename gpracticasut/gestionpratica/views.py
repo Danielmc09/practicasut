@@ -233,7 +233,15 @@ class SolictudPracticasCrear(CreateView):
             print('Value error', str(e))
 
 
-class SolictudPracticasUpdate(UpdateView):
+class SolictudPracticasUpdateView(UpdateView):
+    """
+    función creada para actualizar el modelo de practicas.
+    capturamos el pk de la solicitud de actualización,
+    lo consultamos en el modelo para indicarle a el metodo
+    post el obbjeto que deseamos actualizar, esto con el fin
+    de no crear un objeto nuevo.
+
+    """
     model = SolictudPratica
     form_class = SolictudPraticaForm
     template_name = 'gestionpratica/solicitudpracticasupdate_form.html'
@@ -241,26 +249,59 @@ class SolictudPracticasUpdate(UpdateView):
     page_title = 'ACTUALIZAR PRATICAS'
     context_object_name = 'obj'
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        id_solicitud = kwargs['pk']
+        resol = self.model.objects.get(solp_id=id_solicitud)
+        form = self.form_class(request.POST, instance=resol)
+        if form.is_valid():
+            solicitud = form.save(commit=False)
+            numdias = request.POST['solp_numerodias']
+            duracion = (int(numdias) - (0.5))
+            solicitud.solp_duraciondoc = duracion
+            solicitud.save()
+            return redirect(reverse('gestionpratica:solicitudpracticas_listar'))
+
     def get_context_data(self, **kwargs):
-        context = super(SolictudPracticasUpdate, self).get_context_data(**kwargs)
+        context = super(SolictudPracticasUpdateView, self).get_context_data(**kwargs)
         date = datetime.date.today()
         year = date.strftime("%Y")
         context['year'] = year
         context['page_title'] = self.page_title
         return context
 
+class SolictudPracticasDeleteView(DeleteView):
+    model = SolictudPratica
+    form_class = SolictudPraticaForm
+    template_name = 'gestionpratica/solicitudpracticasupdate_form.html'
+    success_url = reverse_lazy('gestionpratica:solicitudpracticas_listar')
+
+
+class SolictudPracticasGestionVehicleUpdateView(UpdateView):
+    model = SolictudPratica
+    form_class = SolictudPraticaGesVehicleForm
+    template_name = 'gestionpratica/gestionvehicle_form.html'
+    success_url = reverse_lazy('gestionpratica:solicitudpracticas_listar')
+    page_title = 'GESTION VEHICULO PRATICAS'
+    context_object_name = 'obj'
+
     def post(self, request, *args, **kwargs):
-        try:
-            form = self.form_class(request.POST)
-            if form.is_valid():
-                solicitud = form.save(commit=False)
-                numdias = request.POST['solp_numerodias']
-                duracion = (int(numdias) - (0.5))
-                solicitud.solp_duraciondoc = duracion
-                solicitud.save()
-                return redirect(reverse('gestionpratica:solicitudpracticas_listar'))
-        except ValueError as e:
-            print('Value error', str(e))
+        self.object = self.get_object()
+        id_solicitud = kwargs['pk']
+        resol = self.model.objects.get(solp_id=id_solicitud)
+        form = self.form_class(request.POST, instance=resol)
+        if form.is_valid():
+            solicitud = form.save(commit=False)
+            gestion = request.POST['solp_cvehiculopractica']
+            solicitud.solp_cvehiculopractica = gestion
+            solicitud.save()
+            return redirect(reverse('gestionpratica:solicitudpracticas_listar'))
+
+    def get_context_data(self, **kwargs):
+        context = super(SolictudPracticasGestionVehicleUpdateView, self).get_context_data(**kwargs)
+        context['page_title'] = self.page_title
+        return context
+
 
 """class SolictudPracticasEditar(UpdateView):
     model = SolictudPratica
