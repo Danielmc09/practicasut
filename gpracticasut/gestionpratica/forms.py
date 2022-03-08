@@ -151,6 +151,10 @@ class SolictudPraticaGesVehicleForm(forms.ModelForm):
         }
 
 class VhiculosPracticasForm(forms.ModelForm):
+
+    vehicle =  VhiculosPracticas.objects.all()
+    print(vehicle)
+
     class Meta:
         model = VhiculosPracticas
         fields =[
@@ -166,8 +170,6 @@ class VhiculosPracticasForm(forms.ModelForm):
         }
         widgets = {
             'vehi_id': forms.Select(attrs={'class': 'form-control', 'autofocus': 'autofocus', 'placeholder': 'Vehiculo'}),
-            #'solp_id': forms.TextInput(attrs={'class': 'form-control', 'autofocus': 'autofocus', 'placeholder': 'Vehiculo'}),
-            #'grin_descripcion': forms.Textarea(attrs={'class': 'form-control','rows': 5,'cols': 20,'placeholder': 'Ingrese Descipción'}),
         }
 
 class PersonaIntegranteDocenteForm(forms.ModelForm):

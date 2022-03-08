@@ -431,6 +431,7 @@ class VehiculoPracticasListar(ListView):
     page_title = 'Vehiculo Asignados a la Práctica'
     template_name = 'gestionpratica/vehiculospracticas_list.html'
 
+
     def get_context_data(self, **kwargs):
         context = super(VehiculoPracticasListar, self).get_context_data(**kwargs)
         context['pk'] = self.kwargs.get('pk')
@@ -450,7 +451,6 @@ class VehiculoPracticaCrear(CreateView):
     def get_context_data(self, **kwargs):
         context = super(VehiculoPracticaCrear, self).get_context_data(**kwargs)
         context['pk'] = self.kwargs.get('pk')
-        # pk = self.kwargs.get('pk')
         context['page_title'] = self.page_title
         return context
 
@@ -463,6 +463,74 @@ class VehiculoPracticaCrear(CreateView):
             # solicitud.id_solp_id = self.kwargs.get('pk')
             solicitud.save()
             return HttpResponseRedirect(reverse_lazy('gestionpratica:vehiculopractica_list', kwargs={'pk': pk}))
+
+
+class VehiculoPracticaActualizarView(UpdateView):
+    model = VhiculosPracticas
+    form_class = VhiculosPracticasForm
+    template_name = 'gestionpratica/vehiculopractica_update.html'
+    #success_url = reverse_lazy('pbdeportivas:datosantrop')
+    page_title = 'Actualizar Vehiculo'
+    context_object_name = 'obj'
+
+    def get_context_data(self, **kwargs):
+        context = super(VehiculoPracticaActualizarView, self).get_context_data(**kwargs)
+        context['pk'] = self.kwargs.get('pk')
+        # pk = self.kwargs.get('pk')
+        context['page_title'] = self.page_title
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+        id_solicitud = kwargs['pk']
+        resol = self.model.objects.get(vepr_id=id_solicitud)
+        form = self.form_class(request.POST, instance=resol)
+        if form.is_valid():
+            solicitud = form.save(commit=False)
+            pk = self.kwargs.get('pk')
+            #solicitud.id_solp_id = self.kwargs.get('pk')
+            solicitud.save()
+            return HttpResponseRedirect(reverse_lazy('gestionpratica:vehiculopractica_list', kwargs={'pk': pk}))
+
+
+
+class VehiculoPracticaEliminarView(DeleteView):
+    model = VhiculosPracticas
+    form_class = VhiculosPracticasForm
+    template_name = 'gestionpratica/vehiculopractica_update.html'
+    success_url = reverse_lazy('gestionpratica:vehiculopractica_list')
+    page_title = 'Actualizar Vehiculo'
+    context_object_name = 'obj'
+
+    def get_context_data(self, **kwargs):
+        context = super(VehiculoPracticaEliminarView, self).get_context_data(**kwargs)
+        context['pk'] = self.kwargs.get('pk')
+        # pk = self.kwargs.get('pk')
+        context['page_title'] = self.page_title
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+        id_solicitud = kwargs['pk']
+        print('ID_SOLICITUD ----> ', id_solicitud)
+        pk_practica = request.POST['solp_id']
+        print('PK_PRACTICA  ----> ', pk_practica)
+        #resol = self.model.objects.get(vepr_id=id_solicitud)
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect(self.get_success_url(), kwargs={'pk': pk_practica})
+            #return redirect(reverse('gestionpratica:vehiculopractica_list', kwargs={'pk': pk_practica}))
+        #return HttpResponseRedirect(reverse_lazy('gestionpratica:vehiculopractica_list', kwargs={'pk': pk_practica}))
+
+
+
+
+
+
+
+
+
+
 
 
 # DOCENTES PRACTICAS
