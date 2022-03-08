@@ -52,8 +52,8 @@
             <td>{{ vehiculos.vehi_id.vehi_transporte }}</td>
             <td>{{ vehiculos.vehi_id.vehi_combustible }}</td>
             <td>
-                <a href="{% url 'gestionpratica:vehiculopractica_update' vehiculos.vehi_id.vehi_id %}" class="btn btn-light-danger font-weight-bold py-3 px-6 mb-2 text-center btn-block" data-toggle="modal" data-target="#exampleModalCenter">
-                Eliminar practica
+                <a href="{% url 'gestionpratica:vehiculopractica_delete' vehiculos.vepr_id %}" class="btn btn-light-danger font-weight-bold py-3 px-6 mb-2 text-center btn-block" data-toggle="modal" data-target="#exampleModalCenter">
+                Eliminar vehiculo asignado
             </a>
             </td>
         </tr>
@@ -70,7 +70,7 @@
                     <div class="modal-body">
                         <p>Estas seguro de eliminar el vehiculo {{ vehiculos.vehi_id.vehi_placa }} asignado a esta practica </p>
                     </div>
-                    <form action="{% url 'gestionpratica:vehiculopractica_delete' vehiculos.vehi_id.vehi_id %}" method='post'>
+                    <form action="{% url 'gestionpratica:vehiculopractica_delete' vehiculos.vepr_id %}" method='post'>
                         {% csrf_token %}
                         <input type="hidden" name="solp_id" class="form-control" autofocus="autofocus" placeholder="Vehiculo"
                          id="solp_id" value="{{ pk }}">

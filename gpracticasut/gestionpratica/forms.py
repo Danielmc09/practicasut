@@ -151,10 +151,6 @@ class SolictudPraticaGesVehicleForm(forms.ModelForm):
         }
 
 class VhiculosPracticasForm(forms.ModelForm):
-
-    vehicle =  VhiculosPracticas.objects.all()
-    print(vehicle)
-
     class Meta:
         model = VhiculosPracticas
         fields =[
@@ -163,7 +159,6 @@ class VhiculosPracticasForm(forms.ModelForm):
         ]
         labels = {
             'vehi_id': 'Vehiculo',
-            #'solp_id': 'Practica'
         }
         help_texts = {
             'vehi_id': 'Seleccionar Vehiculo',
