@@ -18,7 +18,13 @@
                             class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{ form.vehi_id }}
+                        <select name="vehi_id" class="form-control" autofocus="autofocus" placeholder="Vehiculo"
+                                required="" id="id_vehi_id">
+                            <option value="" selected="">---------</option>
+                            {% for foo in data %}
+                                <option value="{{ foo.id }}">{{ foo.placa }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
                 <input type="hidden" name="solp_id" class="form-control" autofocus="autofocus" placeholder="Vehiculo"

@@ -24,6 +24,8 @@ from .forms import GrupoIntegranteForm, TipoIntegranteForm, LugaresPraticasForm,
 # Create your views here.
 
 # AGRUPACION DE TIPOS DE INTEGRANTES
+from gestionflota.models import Vehiculos
+
 
 class GrupoIntegranteListar(ListView):
     model = GrupoIntegrante
@@ -448,10 +450,33 @@ class VehiculoPracticaCrear(CreateView):
     context_object_name = 'obj'
 
 
+    def validate_vehicle(self):
+        try:
+            placas = []
+            uso = []
+            vehiculos = Vehiculos.objects.all()
+            vehiculo_enuso = VhiculosPracticas.objects.all()
+            for j in vehiculo_enuso:
+                vhc = j.vehi_id
+                uso.append(str(vhc))
+            for i in vehiculos:
+                vehiculos_disponibles = i.vehi_placa
+                id_vehiculos = i.vehi_id
+                if vehiculos_disponibles not in uso:
+                    data = {
+                        'id': id_vehiculos,
+                        'placa': vehiculos_disponibles
+                    }
+                    placas.append(data)
+            return placas
+        except Exception as e:
+            print(e)
+
     def get_context_data(self, **kwargs):
         context = super(VehiculoPracticaCrear, self).get_context_data(**kwargs)
         context['pk'] = self.kwargs.get('pk')
         context['page_title'] = self.page_title
+        context['data'] = self.validate_vehicle()
         return context
 
     def post(self, request, *args, **kwargs):
